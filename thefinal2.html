@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>登入系統</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        body, html {
+    height: 100%;
+    margin: 0;
+    font-family: Arial, sans-serif;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+h1 {
+    margin-bottom: 20px;
+}
+
+input[type="password"] {
+    margin-bottom: 20px;
+    padding: 10px;
+    font-size: 16px;
+}
+
+.button-group {
+    display: flex;
+    gap: 10px;
+}
+
+        </style>
+</head>
+<body>
+    <div class="container">
+        <h1>登入系統</h1>
+        <input type="password" id="passwordInput" placeholder="輸入密碼">
+        <div class="button-group">
+            <button onclick="login()">已有帳號</button>
+            <button onclick="generateAccount()">生成帳號</button>
+        </div>
+    </div>
+    <script>
+        function login() {
+    const password = document.getElementById('passwordInput').value;
+    redirectToPage(password);
+}
+
+function generateAccount() {
+    const password = document.getElementById('passwordInput').value;
+    if (password) {
+        alert('帳號已生成！');
+        redirectToPage(password);
+    } else {
+        alert('請先輸入密碼');
+    }
+}
+
+function redirectToPage(password) {
+    if (password === '111') {
+        window.location.href = 'blue.html';
+    } else if (password === '222') {
+        window.location.href = 'red.html';
+    } else {
+        alert('密碼錯誤');ㄍ
+    }
+}
+
+
+    </script>
+  
+</body>
+</html>
