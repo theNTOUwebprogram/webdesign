@@ -1,14 +1,15 @@
-let have_account;
-let new_account;
 let accountInput;
 let passwordInput;
+let have_account;
+let new_account;
+
 
 
 function start() {
-    have_account= document.getElementById("have_account");
-    new_account = document.getElementById("new_account");
     accountInput = document.getElementById("accountInput");
     passwordInput = document.getElementById("passwordInput");
+    have_account= document.getElementById("have_account");
+    new_account = document.getElementById("new_account");
     
     have_account.addEventListener("click", login, false);
     new_account.addEventListener("click", generateAccount, false);
