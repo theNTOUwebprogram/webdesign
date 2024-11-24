@@ -2,27 +2,142 @@ body, html {
     height: 100%;
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: CadetBlue;
 }
 
-.container {
+#share {
+    background-color: #1877F2;
+    cursor: pointer;
+    position: relative;
+    color: white;
+    font-size: 17px;
+    font-weight: bolder;
+    left: 85%;
+    top: 80px;
+    width: 100px;
+    height: 60px;
+    list-style-type: none;
+    border-color: #1877F2;
+}
+
+#facebook {
+    position: relative;
+    top: 12px;
+    width:30px;
+    height:30px;
+    float: right;
+}
+
+
+#login_page {
+    text-align: center;
+    font-size: 70px;
+    color: #223553;
+}
+
+#login_container {
+    color: #223553; 
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: center;
-    height: 100%;
+
+    height: 65%;
+    width: 50%;
+
+    margin: auto;
+
+    border: 1px solid #f0c351;
+    border-radius: 30px;
+    box-shadow: 3px 3px 10px #9a572d, -3px -3px 10px #9a572d;
+    background-color: #f0c351;
 }
 
 h1 {
     margin-bottom: 20px;
 }
 
-input[type="password"] {
+#tag {
+    position:relative;
+    display: grid;
+    place-items: center;
+    width: 130px;
+    height: 130px;
+    left: 130px;
+    top: 20px;
+    font-size: 25px;
+    font-weight: bolder;
+    text-align: center;
+    margin-bottom: 0px;
+    background-color: #793a13;
+    color: #dee4cd;
+    border-radius: 50%;
+    transform: rotate(-30deg);
+}
+
+#first_line {
+    display: flex;
+    flex-wrap: nowrap;
+    box-sizing: border-box;
+}
+
+#coin {
+    position:relative;
+    width: 100px;
+    height: 100px;
+    top:17px;
+    left:15px;
+}
+
+#user_login {
+   font-size: 50px;
+   width: 75%;
+   position:relative;
+   left: -20px;
+}
+
+#password_annotation {
+    display:block;
+    position: relative;
+    top: 10px;
+    left: -165px;
+    font-size: large;
+    font-weight: bold;
+}
+
+#passwordInput {
     margin-bottom: 20px;
     padding: 10px;
-    font-size: 16px;
+    font-size: 30px;
+    background-color: #d8dbcf;
+    border-radius: 10px;
+    border: none;
 }
 
 .button-group {
     display: flex;
-    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+#have_account, #new_account {
+    color: #223553;
+    font-size: 30px;
+    font-weight: bold;
+    width: 390px;
+    height: 55px;
+    margin-bottom: 20px;
+    background-color: #d8dbcf;
+    border: none;
+    border-radius: 10px;
+    transition: background-color 0.5s ease;
+}
+#have_account:hover, #new_account:hover {
+    cursor:pointer;
+    background-color: #ebeee3;
+    border-color: #ebeee3;
+    border: 1px solid #d8dbcf;
+}
+#have_account:active, #new_account:active {
+    background-color: #585a55;
+    transform: translateY(2px);
 }

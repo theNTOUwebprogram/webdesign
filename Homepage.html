@@ -8,13 +8,37 @@
         <script src="Homepage.js"></script>
     </head>
     <body>
-        <div class="container">
-            <h1>登入系統</h1>
+        <h1 id="login_page">登入頁面</h1>
+        <div id="login_container">
+            <div id="first_line">
+                <h1 id = "user_login">使用者登入</h1>
+                <img id="coin" src="coin.png" alt="coin_image">
+            </div>
+            <p id="password_annotation">密碼</p>
             <input type="password" id="passwordInput" placeholder="輸入密碼">
             <div class="button-group">
-                <button onclick="login()">已有帳號</button>
-                <button onclick="generateAccount()">生成帳號</button>
+                <button id = "have_account" onclick="login()">已有帳號</button>
+                <button id = "new_account" onclick="generateAccount()">創建帳號</button>
             </div>
+            <p id="tag">
+                Save
+                <br>
+                Money
+            </p>
         </div>
+        <a href="https://www.facebook.com/sharer/sharer.php?u=主頁面網址" target="_blank">
+            <button id="share">
+                <svg id="facebook" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" width="100" height="100">
+                    <circle cx="12" cy="12" r="12" fill="#1877F2"/>
+                    <path d="M15.5 8H13V6.5C13 6.2 13.2 6 13.5 6H15.5V3.5H13.5C11.8 3.5 10.5 4.8 10.5 6.5V8H9V10.5H10.5V17H13V10.5H15L15.5 8Z" fill="white"/>
+                </svg>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" class="icon-sm">
+                    <path fill-rule="evenodd" clip-rule="evenodd" d="M11.2929 3.29289C11.6834 2.90237 12.3166 2.90237 12.7071 3.29289L16.7071 7.29289C17.0976 7.68342 17.0976 8.31658 16.7071 8.70711C16.3166 9.09763 15.6834 9.09763 15.2929 8.70711L13 6.41421V15C13 15.5523 12.5523 16 12 16C11.4477 16 11 15.5523 11 15V6.41421L8.70711 8.70711C8.31658 9.09763 7.68342 9.09763 7.29289 8.70711C6.90237 8.31658 6.90237 7.68342 7.29289 7.29289L11.2929 3.29289ZM4 14C4.55228 14 5 14.4477 5 15V18C5 18.5523 5.44772 19 6 19H18C18.5523 19 19 18.5523 19 18V15C19 14.4477 19.4477 14 20 14C20.5523 14 21 14.4477 21 15V18C21 19.6569 19.6569 21 18 21H6C4.34315 21 3 19.6569 3 18V15C3 14.4477 3.44772 14 4 14Z" fill="currentColor">
+                    </path>  
+                </svg>
+                <br>
+                分享
+            </button>
+        </a>
     </body>
 </html>
