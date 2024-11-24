@@ -1,20 +1,91 @@
+let have_account;
+let new_account;
+let accountInput;
+let passwordInput;
+
+
+function start() {
+    have_account= document.getElementById("have_account");
+    new_account = document.getElementById("new_account");
+    accountInput = document.getElementById("accountInput");
+    passwordInput = document.getElementById("passwordInput");
+    
+    have_account.addEventListener("click", login, false);
+    new_account.addEventListener("click", generateAccount, false);
+}
+
 function login() {
-    const password = document.getElementById('passwordInput').value;
-    redirectToPage(password);
+    let account = accountInput.value;
+    let password = passwordInput.value;
+    let flag = 0;
+    if ((account === "") && (password === "")) {
+        window.alert("請輸入帳號及密碼");
+    }
+    else if (account === "") {
+        window.alert("請輸入帳號");
+    }
+    else if (password === "") {
+        window.alert("請輸入密碼");
+    }
+    else {
+        for (let i = 0; i < localStorage.length; i++) {
+            if ((localStorage.key(i) === account ) && (CryptoJS.AES.decrypt(localStorage.getItem(account), localStorage.key(i)).toString(CryptoJS.enc.Utf8) ===  password)) {  
+                window.alert("登入成功");
+                accountInput.value = "";
+                passwordInput.value = "";
+                flag = 1;
+                break;
+            }
+            else if (localStorage.key(i) === account) {
+                window.alert("密碼錯誤，請重新輸入密碼");
+                passwordInput.value = "";
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 0) {
+            window.alert("查無此帳號，請重新輸入帳號及密碼");
+            accountInput.value = "";
+            passwordInput.value = "";
+        }
+    }
+    //redirectToPage(password);
 }
 
 function generateAccount() {
-    const password = document.getElementById('passwordInput').value;
-    if (password) {
-        alert('帳號已生成！');
-        redirectToPage(password);
+    let account = accountInput.value;
+    let password = passwordInput.value;
+    let key = CryptoJS.AES.encrypt(password, account).toString();
+    let flag = 0;
+    if ((account === "") && (password === "")) {
+        window.alert("請輸入帳號及密碼");
+    }
+    else if (account === "") {
+        window.alert("請輸入帳號");
+    }
+    else if (password === "") {
+        window.alert("請輸入密碼");
     }
     else {
-        alert('請先輸入密碼');
+        for (let i = 0; i < localStorage.length; i++) {
+            if (localStorage.key(i) === account ) {
+                flag = 1;
+                break;
+            }
+        }
+        if (flag == 1) {
+            window.alert("帳號名稱已被使用，請重新輸入帳號及密碼");
+        }
+        else {
+            localStorage.setItem(account, key);
+        }
+        accountInput.value = "";
+        passwordInput.value = "";
     }
+    
 }
 
-function redirectToPage(password) {
+/*function redirectToPage(password) {
     if (password === '111') {
         window.location.href = 'blue.html';
     }
@@ -24,4 +95,6 @@ function redirectToPage(password) {
     else {
         alert('密碼錯誤');
     }
-}
+}*/
+
+window.addEventListener("load", start, false);

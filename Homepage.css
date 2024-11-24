@@ -5,15 +5,21 @@ body, html {
     background-color: CadetBlue;
 }
 
+#share_position {
+    border: 1px solid;
+    
+    
+}
+
 #share {
+    position: fixed;
     background-color: #1877F2;
     cursor: pointer;
-    position: relative;
     color: white;
     font-size: 17px;
     font-weight: bolder;
-    left: 85%;
-    top: 80px;
+    right: 20px;
+    bottom: 20px;
     width: 100px;
     height: 60px;
     list-style-type: none;
@@ -42,7 +48,7 @@ body, html {
     align-items: center;
 
     height: 65%;
-    width: 50%;
+    width: 450px;
 
     margin: auto;
 
@@ -56,23 +62,7 @@ h1 {
     margin-bottom: 20px;
 }
 
-#tag {
-    position:relative;
-    display: grid;
-    place-items: center;
-    width: 130px;
-    height: 130px;
-    left: 130px;
-    top: 20px;
-    font-size: 25px;
-    font-weight: bolder;
-    text-align: center;
-    margin-bottom: 0px;
-    background-color: #793a13;
-    color: #dee4cd;
-    border-radius: 50%;
-    transform: rotate(-30deg);
-}
+
 
 #first_line {
     display: flex;
@@ -95,7 +85,8 @@ h1 {
    left: -20px;
 }
 
-#password_annotation {
+.annotation {
+    margin-top: 0px;
     display:block;
     position: relative;
     top: 10px;
@@ -104,8 +95,8 @@ h1 {
     font-weight: bold;
 }
 
-#passwordInput {
-    margin-bottom: 20px;
+.Input {
+    margin-bottom: 0px;
     padding: 10px;
     font-size: 30px;
     background-color: #d8dbcf;
@@ -114,18 +105,21 @@ h1 {
 }
 
 .button-group {
+    position: relative;
     display: flex;
+    flex-direction: column;
     flex-wrap: wrap;
-    justify-content: center;
+    top: 50px;
+    left: -92px;
 }
 
 #have_account, #new_account {
     color: #223553;
     font-size: 30px;
     font-weight: bold;
-    width: 390px;
+    width: 200px;
     height: 55px;
-    margin-bottom: 20px;
+    margin-top: 20px;
     background-color: #d8dbcf;
     border: none;
     border-radius: 10px;
@@ -140,4 +134,21 @@ h1 {
 #have_account:active, #new_account:active {
     background-color: #585a55;
     transform: translateY(2px);
+}
+#tag {
+    position:relative;
+    display: grid;
+    place-items: center;
+    width: 130px;
+    height: 130px;
+    left: 130px;
+    top: -100px;
+    font-size: 25px;
+    font-weight: bolder;
+    text-align: center;
+    margin-bottom: 0px;
+    background-color: #793a13;
+    color: #dee4cd;
+    border-radius: 50%;
+    transform: rotate(-30deg);
 }
