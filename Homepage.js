@@ -3,6 +3,7 @@ let passwordInput;
 let have_account;
 let new_account;
 let delete_account;
+let format = /^[a-zA-Z]+\d+$/;
 
 
 
@@ -30,6 +31,10 @@ function login() {
     }
     else if (password === "") {
         window.alert("請輸入密碼");
+    }
+    else if (!format.test(password)) {
+        window.alert("密碼格式錯誤，請重新輸入密碼");
+        passwordInput.value = "";
     }
     else {
         for (let i = 0; i < localStorage.length; i++) {
@@ -70,6 +75,10 @@ function generateAccount() {
     else if (password === "") {
         window.alert("請輸入密碼");
     }
+    else if (!format.test(password)) {
+        window.alert("密碼格式錯誤，請重新輸入密碼");
+        passwordInput.value = "";
+    }
     else {
         for (let i = 0; i < localStorage.length; i++) {
             if (localStorage.key(i) === account ) {
@@ -101,6 +110,10 @@ function deleteAccount() {
     }
     else if (password === "") {
         window.alert("請輸入密碼");
+    }
+    else if (!format.test(password)) {
+        window.alert("密碼格式錯誤，請重新輸入密碼");
+        passwordInput.value = "";
     }
     else {
         for (let i = 0; i < localStorage.length; i++) {
