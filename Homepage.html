@@ -7,28 +7,35 @@
         <link rel="stylesheet" href="Homepage.css">
         <script src="Homepage.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/crypto-js/3.1.9-1/crypto-js.js"></script>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Oooh Baby">
     </head>
     <body>
         <h1 id="login_page">登入頁面</h1>
+        
         <div id="login_container">
-            <div id="block"></div>
+            <span id="paper"></span>
+            <div id="block1"></div>
+            <div id="block2"></div>   
             <div id="first_line">
                 <h1 id = "user_login">使用者登入</h1>
                 <img id="coin" src="coin.png" alt="coin_image">
             </div>
-            <p class="annotation">帳號</p>
+            <p class="annotation" id="account_annotation">帳號</p>
             <input class="Input" type="text" id="accountInput" placeholder="輸入帳號">
-            <p class="annotation">密碼</p>
+            <p class="annotation" id="password_annotation">密碼</p>
             <input class="Input"  type="password" id="passwordInput" placeholder="輸入密碼">
             <div class="button-group">
-                <button id = "have_account" >已有帳號</button>
-                <button id = "new_account">創建帳號</button>
+                <button class="button" id = "have_account" >已有帳號</button>
+                <button class="button" id = "new_account">創建帳號</button>
+                <button class="button" id = "delete_account">刪除帳號</button>
             </div>
             <p id="tag">
                 Save
                 <br>
                 Money
             </p>
+
+            
         </div>
         <a href="https://www.facebook.com/sharer/sharer.php?u=登入頁面網址" target="_blank">
             <button id="share">

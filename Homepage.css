@@ -18,13 +18,17 @@ h1 {
     color: #223553;
 }
 
+
+
 #login_container {
+    position: relative;
+
     display: flex;
     flex-direction: column;
     align-items: center;
 
-    height: 72%;
-    width: 500px;
+    height: 73%;
+    width: 510px;
     margin: auto;
     border-radius: 30px;
     border: 1px solid #f0c351;
@@ -34,18 +38,48 @@ h1 {
     background-color: #f0c351;
 }
 
-#block {
-    height: 60px;
+#paper {
+    position: absolute;
+
+    height: 630px;
+    width: 450px;
+    top: 30px;
+    background-color: rgb(252, 251, 235);
+    z-index: 0;
+}
+
+#block1 {
+    height: 30px;
     width: 250px;
-    border-radius: 5px;
-    
-    background-color: rgb(61, 59, 59);
+
+    border-radius: 3px;
+    background-color:#5c5e61;
+
+    z-index: 2;
+}
+
+#block2 {
+    position: absolute;
+
+    height: 40px;
+    width: 250px;
+
+    border-radius: 10px;
+    border: 9px solid rgb(87, 83, 83);
+
+    z-index: 1;
 }
 
 #first_line {
+    position: absolute;
+
+    top: 60px;
+
     display: flex;
     flex-wrap: nowrap;
     box-sizing: border-box;
+
+    z-index: 1;
 }
 
 #user_login {
@@ -67,19 +101,28 @@ h1 {
 }
 
 .annotation {
-    position: relative;
-
-    display:block;
-
     margin-top: 0px;
-    top: 10px;
-    left: -165px;
+    left: 70px;
 
     font-size: large;
     font-weight: bold;
+
+    z-index: 1;
+}
+
+#account_annotation {
+    position:absolute;
+    top: 180px;
+}
+
+#password_annotation {
+    position:absolute;
+    top: 280px;
 }
 
 .Input {
+    position:absolute;
+
     padding: 10px; 
     margin-bottom: 0px;
     border: none;
@@ -87,20 +130,32 @@ h1 {
     
     font-size: 30px;
     background-color: #d8dbcf;
+
+    z-index: 1;
+}
+
+#accountInput {
+    top: 210px;
+}
+
+#passwordInput {
+    top: 310px;
 }
 
 .button-group {
-    position: relative;
+    position: absolute;
 
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
 
-    top: 50px;
-    left: -92px;
+    top: 390px;
+    left: 50px;
+
+    z-index: 1;
 }
 
-#have_account, #new_account {
+.button {
     height: 55px;
     width: 200px;
     margin-top: 20px;
@@ -116,7 +171,7 @@ h1 {
     transition: background-color 0.5s ease;
 }
 
-#have_account:hover, #new_account:hover {
+.button:hover {
     cursor:pointer;
 
     border: 1px solid #d8dbcf;
@@ -125,28 +180,29 @@ h1 {
     background-color: #ebeee3;
 }
 
-#have_account:active, #new_account:active {
+.button:active {
     background-color: #585a55;
     
     transform: translateY(2px);
 }
 
 #tag {
-    position:relative;
+    position:absolute;
 
     display: grid;
     place-items: center;
 
     height: 130px;
     width: 130px;
-    top: -100px;
-    left: 130px;
+    bottom: 110px;
+    right: 75px;
     
     
     margin-bottom: 0px;
     border-radius: 50%;
     
-    font-size: 25px;
+    font-family: Oooh Baby;
+    font-size: 30px;
     font-weight: bolder;
     text-align: center;
 
