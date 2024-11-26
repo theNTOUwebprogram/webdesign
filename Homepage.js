@@ -91,6 +91,7 @@ function generateAccount() {
         }
         else {
             localStorage.setItem(account, key);
+            window.alert("帳號創建成功\n帳號:" + account + "\n密碼:" + password);
         }
         accountInput.value = "";
         passwordInput.value = "";
