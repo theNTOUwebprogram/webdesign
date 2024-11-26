@@ -123,6 +123,7 @@ h1 {
 .Input {
     position:absolute;
 
+    left: 55px;
     padding: 10px; 
     margin-bottom: 0px;
     border: none;
@@ -132,6 +133,10 @@ h1 {
     background-color: #d8dbcf;
 
     z-index: 1;
+}
+
+.Input:hover {
+    background-color: #ebeee3;
 }
 
 #accountInput {
@@ -175,7 +180,6 @@ h1 {
     cursor:pointer;
 
     border: 1px solid #d8dbcf;
-    border-color: #ebeee3;
 
     background-color: #ebeee3;
 }
