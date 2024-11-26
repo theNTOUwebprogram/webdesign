@@ -1,3 +1,5 @@
+const coin_image = new Image();
+coin_image.src = "coin.png";
 let accountInput;
 let passwordInput;
 let have_account;
@@ -13,6 +15,8 @@ function start() {
     have_account= document.getElementById("have_account");
     new_account = document.getElementById("new_account");
     delete_account = document.getElementById("delete_account");
+    coin = document.getElementById("coin");
+    coin.src = coin_image.src;
     
     have_account.addEventListener("click", login, false);
     new_account.addEventListener("click", generateAccount, false);
