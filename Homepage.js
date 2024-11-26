@@ -43,6 +43,7 @@ function login() {
                 accountInput.value = "";
                 passwordInput.value = "";
                 flag = 1;
+                window.location.href = 'save_money.html';
                 break;
             }
             else if (localStorage.key(i) === account) {
@@ -58,7 +59,7 @@ function login() {
             passwordInput.value = "";
         }
     }
-    //redirectToPage(password);
+    
 }
 
 function generateAccount() {
@@ -140,17 +141,5 @@ function deleteAccount() {
         }
     }
 }
-
-/*function redirectToPage(password) {
-    if (password === '111') {
-        window.location.href = 'blue.html';
-    }
-    else if (password === '222') {
-        window.location.href = 'red.html';
-    }
-    else {
-        alert('密碼錯誤');
-    }
-}*/
 
 window.addEventListener("load", start, false);
