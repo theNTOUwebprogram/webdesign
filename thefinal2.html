@@ -1,77 +1,349 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>登入系統</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>記帳系統</title>
     <style>
-        body, html {
-    height: 100%;
-    margin: 0;
-    font-family: Arial, sans-serif;
-}
+        body {
+            font-family: Arial, sans-serif;
+            color: aliceblue;
+            background-color: #333;
+        }
 
-.container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    height: 100%;
-}
+        #chartContainer {
+            overflow-x: auto;
+            width: 100%;
+            height: 300px;
+            border: 1px solid #ccc;
+            background-color: black;
+        }
 
-h1 {
-    margin-bottom: 20px;
-}
+        #lineChart {
+            min-width: 1200px;
+        }
 
-input[type="password"] {
-    margin-bottom: 20px;
-    padding: 10px;
-    font-size: 16px;
-}
+        #pieChartContainer {
+            margin-top: 20px;
+            width: 100%;
+            height: 300px;
+        }
 
-.button-group {
-    display: flex;
-    gap: 10px;
-}
+        .font-selector {
+            margin-bottom: 20px;
+        }
 
-        </style>
+        .category-options {
+            margin-bottom: 10px;
+        }
+
+        .category-options label {
+            margin-right: 15px;
+        }
+    </style>
 </head>
+
 <body>
-    <div class="container">
-        <h1>登入系統</h1>
-        <input type="password" id="passwordInput" placeholder="輸入密碼">
-        <div class="button-group">
-            <button onclick="login()">已有帳號</button>
-            <button onclick="generateAccount()">生成帳號</button>
-        </div>
+    <h1>本地端記帳系統</h1>
+
+    <div class="font-selector">
+        <label for="fontSelector">選擇字體：</label>
+        <select id="fontSelector" onchange="changeFont()">
+            <option value="Arial">Arial</option>
+            <option value="Courier New">Courier New</option>
+            <option value="Georgia">Georgia</option>
+            <option value="Times New Roman">Times New Roman</option>
+            <option value="Verdana">Verdana</option>
+        </select>
     </div>
+
+    <div id="chartContainer">
+        <canvas id="lineChart"></canvas>
+    </div>
+
+    <div id="pieChartContainer">
+        <canvas id="pieChart"></canvas>
+    </div>
+
+    <h2>新增支出</h2>
+    <div class="category-options">
+        <label><input type="radio" name="expenseCategory" value="交通"> 交通</label>
+        <label><input type="radio" name="expenseCategory" value="吃飯"> 吃飯</label>
+        <label><input type="radio" name="expenseCategory" value="投資"> 投資</label>
+        <label><input type="radio" name="expenseCategory" value="零食"> 零食</label>
+        <label><input type="radio" name="expenseCategory" value="薪水"> 薪水</label>
+    </div>
+    <input type="number" id="expenseAmount" placeholder="金額">
+    <input type="text" id="expenseNote" placeholder="備註 (可選)">
+    <button id="addExpenseBtn" onclick="addExpense()">新增支出</button>
+
+    <h2>今日支出</h2>
+    <div id="expenseList"></div>
+    <button id="clearSelectedBtn" onclick="clearSelected()">清除勾選的今日項目</button>
+
+    <h2>月總結</h2>
+    <p id="todayDate"></p>
+    <p id="monthlyTotal"></p>
+    <p id="monthlyRemaining"></p>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
-        function login() {
-    const password = document.getElementById('passwordInput').value;
-    redirectToPage(password);
-}
+        let chartInstance = null;
+        let pieChartInstance = null;
 
-function generateAccount() {
-    const password = document.getElementById('passwordInput').value;
-    if (password) {
-        alert('帳號已生成！');
-        redirectToPage(password);
-    } else {
-        alert('請先輸入密碼');
-    }
-}
+        function changeFont() {
+            const selectedFont = document.getElementById("fontSelector").value;
+            document.body.style.fontFamily = selectedFont;
 
-function redirectToPage(password) {
-    if (password === '111') {
-        window.location.href = 'blue.html';
-    } else if (password === '222') {
-        window.location.href = 'red.html';
-    } else {
-        alert('密碼錯誤哈哈我學會了');
-    }
-}
+            if (chartInstance) {
+                chartInstance.options.plugins.title.font.family = selectedFont;
+                chartInstance.options.plugins.legend.labels.font.family = selectedFont;
+                chartInstance.update();
+            }
+
+            if (pieChartInstance) {
+                pieChartInstance.options.plugins.title.font.family = selectedFont;
+                pieChartInstance.options.plugins.legend.labels.font.family = selectedFont;
+                pieChartInstance.update();
+            }
+        }
+
+        function renderChart() {
+            const data = JSON.parse(localStorage.getItem("expenses")) || [];
+            const thisMonth = getMonthlyData(data, new Date(), true);
+            const lastMonth = getMonthlyData(data, new Date(new Date().setMonth(new Date().getMonth() - 1)), true);
+
+            const ctx = document.getElementById("lineChart").getContext("2d");
+
+            if (chartInstance) {
+                chartInstance.data.datasets[0].data = thisMonth;
+                chartInstance.data.datasets[1].data = lastMonth;
+                chartInstance.update();
+            } else {
+                chartInstance = new Chart(ctx, {
+                    type: 'line',
+                    data: {
+                        labels: Array.from({ length: 31 }, (_, i) => i + 1),
+                        datasets: [
+                            {
+                                label: "本月",
+                                data: thisMonth,
+                                borderColor: "orange",
+                                fill: false
+                            },
+                            {
+                                label: "上月",
+                                data: lastMonth,
+                                borderColor: "yellow",
+                                fill: false
+                            }
+                        ]
+                    },
+                    options: {
+                        responsive: true,
+                        maintainAspectRatio: false,
+                        scales: {
+                            x: {
+                                title: {
+                                    display: true,
+                                    text: '日期 (日)'
+                                }
+                            },
+                            y: {
+                                title: {
+                                    display: true,
+                                    text: '金額 (元)'
+                                },
+                                ticks: {
+                                    stepSize: 1000
+                                }
+                            }
+                        },
+                        plugins: {
+                            legend: {
+                                labels: {
+                                    font: {
+                                        family: "Arial"
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: "月支出趨勢圖",
+                                font: {
+                                    family: "Arial"
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function renderPieChart() {
+            const data = JSON.parse(localStorage.getItem("expenses")) || [];
+            const currentMonth = new Date().toISOString().slice(0, 7);
+            const filteredData = data.filter(expense => expense.date.startsWith(currentMonth) && expense.category !== "薪水");
+
+            const categoryTotals = {};
+            filteredData.forEach(expense => {
+                categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + Math.abs(expense.amount);
+            });
+
+            const ctx = document.getElementById("pieChart").getContext("2d");
+
+            if (pieChartInstance) {
+                pieChartInstance.data.labels = Object.keys(categoryTotals);
+                pieChartInstance.data.datasets[0].data = Object.values(categoryTotals);
+                pieChartInstance.update();
+            } else {
+                pieChartInstance = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: Object.keys(categoryTotals),
+                        datasets: [{
+                            data: Object.values(categoryTotals),
+                            backgroundColor: ["#640D5F", "#D91656", "#EB5B00", "#FFB200"],
+                            hoverOffset: 4
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: "top",
+                                labels: {
+                                    font: {
+                                        family: "Arial"
+                                    }
+                                }
+                            },
+                            title: {
+                                display: true,
+                                text: "本月支出比例 (不含薪水)",
+                                font: {
+                                    family: "Arial"
+                                }
+                            }
+                        }
+                    }
+                });
+            }
+        }
+
+        function addExpense() {
+            const categoryInput = document.querySelector("input[name='expenseCategory']:checked");
+            const amountInput = document.getElementById("expenseAmount").value;
+            const note = document.getElementById("expenseNote").value;
+
+            if (!categoryInput) {
+                alert("請選擇支出類別！");
+                return;
+            }
+
+            if (!amountInput || isNaN(amountInput)) {
+                alert("請輸入有效的金額！");
+                return;
+            }
+
+            const category = categoryInput.value;
+            let amount = parseFloat(amountInput);
+            if (category !== "薪水") amount = -Math.abs(amount);
+
+            const expense = {
+                date: new Date().toISOString().split("T")[0],
+                category,
+                amount,
+                note: note || "無備註"
+            };
+
+            let data = JSON.parse(localStorage.getItem("expenses")) || [];
+            data.push(expense);
+            localStorage.setItem("expenses", JSON.stringify(data));
+
+            alert("支出已新增！");
+            renderTodayExpenses();
+            displaySummary();
+            renderChart();
+            renderPieChart();
+        }
+
+        function getMonthlyData(data, date, excludeSalary) {
+            const month = date.toISOString().slice(0, 7);
+            const dailyTotals = Array(31).fill(0);
+
+            data.filter(expense => expense.date.startsWith(month))
+                .forEach(expense => {
+                    if (excludeSalary && expense.category === "薪水") return;
+                    const day = parseInt(expense.date.split("-")[2]);
+                    dailyTotals[day - 1] += expense.amount;
+                });
+
+            return dailyTotals;
+        }
+
+        function renderTodayExpenses() {
+            const today = new Date().toISOString().split("T")[0];
+            const data = JSON.parse(localStorage.getItem("expenses")) || [];
+
+            const todayExpenses = data.filter(expense => expense.date === today);
+            const expenseList = document.getElementById("expenseList");
+
+            expenseList.innerHTML = todayExpenses.map((expense, index) =>
+                '<div>' +
+                '<input type="checkbox" id="expense-' + index + '">' +
+                expense.category + ': ' + Math.abs(expense.amount) + ' 元 - ' + expense.note +
+                '</div>'
+            ).join("");
+        }
+
+        function clearSelected() {
+            const checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
+            let data = JSON.parse(localStorage.getItem("expenses")) || [];
+            const today = new Date().toISOString().split("T")[0];
+
+            checkboxes.forEach(checkbox => {
+                const index = checkbox.id.split("-")[1];
+                const todayExpenses = data.filter(expense => expense.date === today);
+                const selectedExpense = todayExpenses[index];
+                const idx = data.indexOf(selectedExpense);
+
+                if (idx !== -1) data.splice(idx, 1);
+            });
+
+            localStorage.setItem("expenses", JSON.stringify(data));
+            renderTodayExpenses();
+            displaySummary();
+            renderChart();
+            renderPieChart();
+        }
+
+        function displaySummary() {
+            const data = JSON.parse(localStorage.getItem("expenses")) || [];
+            const today = new Date();
+            const month = today.toISOString().slice(0, 7);
+
+            const monthlyExpenses = data.filter(expense => expense.date.startsWith(month));
+            const monthlyTotal = monthlyExpenses.reduce((sum, expense) => sum + expense.amount, 0);
+            const salary = monthlyExpenses.filter(expense => expense.category === "薪水").reduce((sum, expense) => sum + expense.amount, 0);
+
+            const monthlyRemaining = salary + monthlyTotal;
+
+            document.getElementById("todayDate").textContent = "今日日期：" + today.toISOString().split("T")[0];
+            document.getElementById("monthlyTotal").textContent = "本月總消費金額：" + Math.abs(monthlyTotal) + " 元";
+            document.getElementById("monthlyRemaining").textContent = "本月剩餘金額：" + monthlyRemaining + " 元";
+        }
+
+        function init() {
+            renderTodayExpenses();
+            displaySummary();
+            renderChart();
+            renderPieChart();
+        }
+
+        init();
     </script>
-  
 </body>
+
 </html>
