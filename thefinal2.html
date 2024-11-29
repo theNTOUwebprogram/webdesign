@@ -121,7 +121,7 @@
 </head>
 
 <body>
-    <h1>本地端記帳系統</h1>
+    <h1>local accounting system</h1>
 
     <div class="font-selector">
         <select id="fontSelector" onchange="changeFont()">
@@ -139,12 +139,12 @@
         </div>
 
         <div class="charts-row" id="additional-charts">
-            <div id="pieChartContainer">
+            <div id="pieChartContainer" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
                 <canvas id="pieChart"></canvas>
             </div>
             
             <div id="comparison-chart-wrapper">
-                <canvas id="comparison-chart"></canvas>
+                <canvas id="comparison-chart" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()"></canvas>
                 <h3 id="comparison-result"></h3>
             </div>
         </div>
