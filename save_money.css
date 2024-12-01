@@ -1,0 +1,111 @@
+body {
+    font-family: Arial, sans-serif;
+    color: aliceblue;
+    background-color: #333;
+}
+
+#chartContainer {
+    overflow-x: auto;
+    width: 100%;
+    height: 300px;
+    margin-bottom: 30px;
+   
+}
+
+#lineChart {
+    min-width: 1200px;
+}
+
+#pieChartContainer {
+    margin-top: 20px;
+    width: 100%;
+    height: 300px;
+}
+
+.font-selector {
+    margin-bottom: 20px;
+}
+
+.category-options {
+    margin-bottom: 10px;
+}
+
+.category-options label {
+    margin-right: 15px;
+}
+#comparison-chart
+{
+    display: block;
+    height: 300px;
+    overflow-y: auto;
+    margin: 20px 0;
+}
+
+.charts-container {
+    margin-bottom: 300px;
+}
+
+.charts-row {
+    display: flex;
+    gap: 20px;
+    margin-top: 20px;
+    opacity: 0;
+    transition: all 3s ease;
+    max-height: 0;
+    overflow: hidden;
+    margin-bottom: 0;
+}
+
+.charts-row.visible {
+    opacity: 1;
+    max-height: 400px;
+    margin-bottom: 20px;
+}
+
+#pieChartContainer {
+    flex: 1;
+    height: 300px;
+    margin-top: 0;
+}
+
+#comparison-chart-wrapper {
+    flex: 1;
+    height: auto;
+    display: flex;
+    flex-direction: column;
+}
+
+#comparison-chart {
+    margin: 0;
+    height: 300px;
+}
+
+#comparison-result {
+    margin-top: 10px;
+    text-align: center;
+}
+
+.charts-container {
+    margin-bottom: 0;
+    transition: margin-bottom 0.3s ease;
+}
+
+.charts-container.expanded {
+    margin-bottom: 20px;
+}
+
+.font-selector {
+    position: fixed;
+    top: 50px;
+    right: 50px;
+    z-index: 1000;
+}
+
+#fontSelector{
+    padding: 8px;
+    border-radius: 4px;
+    background-color:#333;
+    color:aliceblue ;
+    border: none;
+  
+}
