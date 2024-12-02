@@ -109,3 +109,235 @@ body {
     border: none;
   
 }
+
+.month-selector {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.month-selector button {
+    padding: 5px 15px;
+    margin: 0 10px;
+    background-color: #444;
+    color: aliceblue;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+}
+
+.month-selector button:hover {
+    background-color: #555;
+}
+
+.expense-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    background-color: #444;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+.expense-table th,
+.expense-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #555;
+}
+
+.expense-table th {
+    background-color: #2c2c2c;
+    font-weight: bold;
+}
+
+.expense-table tr:hover {
+    background-color: #505050;
+}
+
+.expense-table input[type="checkbox"] {
+    cursor: pointer;
+}
+
+.no-expenses {
+    text-align: center;
+    padding: 20px;
+    color: #888;
+}
+
+/* 添加側邊欄樣式 */
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #444;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+    overflow-y: auto;
+}
+
+/* 側邊欄區塊樣式 */
+.sidebar-section {
+    margin-bottom: 30px;
+    padding: 15px;
+    background-color: #333;
+    border-radius: 8px;
+}
+
+/* 標題樣式 */
+.sidebar h2 {
+    color: aliceblue;
+    margin-bottom: 15px;
+    font-size: 1.2em;
+    padding-bottom: 8px;
+    border-bottom: 1px solid #555;
+}
+
+/* 類別選項樣式 */
+.category-options {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 15px;
+}
+
+.category-options label {
+    margin-bottom: 8px;
+    color: aliceblue;
+}
+
+/* 輸入框和下拉選單統一樣式 */
+.sidebar input[type="number"],
+.sidebar input[type="text"],
+.sidebar input[type="date"],
+.sidebar select {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 12px;
+    border: none;
+    border-radius: 4px;
+    background-color: #555;
+    color: aliceblue;
+    font-size: 14px;
+    box-sizing: border-box;
+}
+
+/* 按鈕樣式 */
+.sidebar button {
+    width: 100%;
+    padding: 10px;
+    border: none;
+    border-radius: 4px;
+    background-color: #666;
+    color: aliceblue;
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.sidebar button:hover {
+    background-color: #777;
+}
+
+/* 滾動條樣式 */
+.sidebar::-webkit-scrollbar {
+    width: 8px;
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #444;
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* 主內容區域 */
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+/* 調整現有元素樣式 */
+.font-selector {
+    right: 20px;
+}
+
+/* 自定義側邊欄滾動條樣式 */
+.sidebar::-webkit-scrollbar {
+    width: 8px;  /* 滾動條寬度 */
+}
+
+.sidebar::-webkit-scrollbar-track {
+    background: #444;  /* 滾動條軌道背景色 */
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb {
+    background: #666;  /* 滾動條顏色 */
+    border-radius: 4px;
+}
+
+.sidebar::-webkit-scrollbar-thumb:hover {
+    background: #777;  /* 滾動條懸停時的顏色 */
+}
+
+/* 類別選項樣式 */
+.category-options {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;  /* 選項之間的間距 */
+    margin-bottom: 15px;
+}
+
+.category-options label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    color: aliceblue;
+}
+
+/* 圖表容器的滾動條樣式 */
+#chartContainer::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;  /* 添加水平滾動條的高度 */
+}
+
+#chartContainer::-webkit-scrollbar-track {
+    background: #444;
+    border-radius: 4px;
+}
+
+#chartContainer::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+#chartContainer::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
+
+/* 比較圖表的滾動條樣式 */
+#comparison-chart::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+#comparison-chart::-webkit-scrollbar-track {
+    background: #444;
+    border-radius: 4px;
+}
+
+#comparison-chart::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+#comparison-chart::-webkit-scrollbar-thumb:hover {
+    background: #777;
+}
