@@ -564,8 +564,6 @@ function init() {
     updateMonthDisplay(); // 添加這行
 }
 
-init();
-
 function showOtherCharts() {
     const additionalCharts = document.getElementById('additional-charts');
     const chartsContainer = document.querySelector('.charts-container');
@@ -618,3 +616,5 @@ function getMonthlyData(data, date, includeScheduled) {
 
     return dailyTotals;
 }
+
+window.addEventListener("load", init, false);
