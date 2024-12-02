@@ -10,69 +10,88 @@
     </head>
 
     <body>
-        <h1>本地端記帳系統</h1>
-        <h1>local accounting system</h1>
-
-        <div class="font-selector">
-            <select id="fontSelector" onchange="changeFont()">
-
-    @@ -139,720 +139,720 @@
-            </div>
-
-            <div class="charts-row" id="additional-charts">
-                <div id="pieChartContainer">
-                <div id="pieChartContainer" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
-                    <canvas id="pieChart"></canvas>
+        <div class="sidebar">
+            <div class="sidebar-section">
+                <h2>新增支出</h2>
+                <div class="category-options">
+                    <label><input type="radio" name="expenseCategory" value="交通"> 交通</label>
+                    <label><input type="radio" name="expenseCategory" value="吃飯"> 吃飯</label>
+                    <label><input type="radio" name="expenseCategory" value="投資"> 投資</label>
+                    <label><input type="radio" name="expenseCategory" value="零食"> 零食</label>
+                    <label><input type="radio" name="expenseCategory" value="薪水"> 薪水</label>
                 </div>
-                
-                <div id="comparison-chart-wrapper">
-                    <canvas id="comparison-chart"></canvas>
-                    <canvas id="comparison-chart" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()"></canvas>
-                    <h3 id="comparison-result"></h3>
-                </div>
+                <input type="number" id="expenseAmount" placeholder="金額">
+                <input type="text" id="expenseNote" placeholder="備註 (可選)">
+                <button id="addExpenseBtn" onclick="addExpense()">新增支出</button>
+            </div>
+    
+            <div class="sidebar-section">
+                <h2>新增預約扣款</h2>
+                <input type="date" id="scheduledDate" placeholder="預約日期">
+                <input type="number" id="scheduledAmount" placeholder="金額">
+                <select id="scheduledCategory">
+                    <option value="交通">交通</option>
+                    <option value="吃飯">吃飯</option>
+                    <option value="投資">投資</option>
+                    <option value="零食">零食</option>
+                </select>
+                <input type="text" id="scheduledNote" placeholder="備註 (可選)">
+                <button id="addScheduledBtn" onclick="addScheduledExpense()">新增預約扣款</button>
+            </div>
+    
+            <div class="sidebar-section">
+                <h2>類別篩選</h2>
+                <select id="category-select">
+                    <option value="">全部</option>
+                    <!-- 程式會動態填充選項 -->
+                </select>
             </div>
         </div>
-
-        <h2>新增預約扣款</h2>
-        <div>
-            <input type="date" id="scheduledDate" placeholder="預約日期">
-            <input type="number" id="scheduledAmount" placeholder="金額">
-            <select id="scheduledCategory">
-                <option value="交通">交通</option>
-                <option value="吃飯">吃飯</option>
-                <option value="投資">投資</option>
-                <option value="零食">零食</option>
-            </select>
-            <input type="text" id="scheduledNote" placeholder="備註 (可選)">
-            <button id="addScheduledBtn" onclick="addScheduledExpense()">新增預約扣款</button>
+    
+        <!-- 將現有內容包裝在 main-content div 中 -->
+        <div class="main-content">
+            <!-- 將原本的新增支出和預約扣款表單從這裡移除 -->
+            <!-- 保留其他所有內容 -->
+            <h1>local accounting system</h1>
+            <p id="todayDate"></p>
+            <h2>月總結</h2>
+            <p id="monthlyTotal"></p>
+            <h1 id="monthlyRemaining"></h1>
+            <div class="font-selector">
+                <select id="fontSelector" onchange="changeFont()">
+                    <option value="Arial">Arial</option>
+                    <option value="Courier New">Courier New</option>
+                    <option value="Georgia">Georgia</option>
+                    <option value="Times New Roman">Times New Roman</option>
+                    <option value="Verdana">Verdana</option>
+                </select>
+            </div>
+    
+            <div class="charts-container">
+                <div class="month-selector">
+                    <button onclick="changeMonth(-1)">上個月</button>
+                    <span id="currentMonthDisplay"></span>
+                    <button onclick="changeMonth(1)">下個月</button>
+                </div>
+                <div id="chartContainer"onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
+                    <canvas id="lineChart"></canvas>
+                </div>
+    
+                <div class="charts-row" id="additional-charts">
+                    <div id="pieChartContainer" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    
+                    <div id="comparison-chart-wrapper">
+                        <canvas id="comparison-chart" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()"></canvas>
+                        <h3 id="comparison-result"></h3>
+                    </div>
+                </div>
+            </div>
+    
+            <h2>今日支出</h2>
+            <button id="clearSelectedBtn" onclick="clearSelected()">清除勾選的今日項目</button>
+            <div id="expenseList"></div>
         </div>
-
-        <h2>新增支出</h2>
-        <div class="category-options">
-            <label><input type="radio" name="expenseCategory" value="交通"> 交通</label>
-            <label><input type="radio" name="expenseCategory" value="吃飯"> 吃飯</label>
-            <label><input type="radio" name="expenseCategory" value="投資"> 投資</label>
-            <label><input type="radio" name="expenseCategory" value="零食"> 零食</label>
-            <label><input type="radio" name="expenseCategory" value="薪水"> 薪水</label>
-        </div>
-        <input type="number" id="expenseAmount" placeholder="金額">
-        <input type="text" id="expenseNote" placeholder="備註 (可選)">
-        <button id="addExpenseBtn" onclick="addExpense()">新增支出</button>
-        <div>
-            <label for="category-select">選擇類別：</label>
-            <select id="category-select">
-                <option value="">全部</option>
-                <!-- 程式會動態填充選項 -->
-            </select>
-        </div>
-
-        <h2>今日支出</h2>
-        <div id="expenseList"></div>
-        <button id="clearSelectedBtn" onclick="clearSelected()">清除勾選的今日項目</button>
-
-        <h2>月總結</h2>
-        <p id="todayDate"></p>
-        <p id="monthlyTotal"></p>
-        <p id="monthlyRemaining"></p>
     </body>
 </html>
