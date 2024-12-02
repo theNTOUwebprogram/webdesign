@@ -1,5 +1,6 @@
 let chartInstance = null;
 let pieChartInstance = null;
+let currentDisplayMonth = new Date(); // 當前顯示的月份
 
 function changeFont() {
     const selectedFont = document.getElementById("fontSelector").value;
@@ -20,40 +21,52 @@ function changeFont() {
 
 function renderChart() {
     const data = JSON.parse(localStorage.getItem("expenses")) || [];
-    const thisMonth = getMonthlyData(data, new Date(), true);
-    const lastMonth = getMonthlyData(data, new Date(new Date().setMonth(new Date().getMonth() - 1)), true);
-
-    // 包含預約扣款與實際支出的資料
-    const thisMonthWithScheduled = getMonthlyData(data, new Date(), false);
+    
+    // 獲取當前月份的天數
+    const daysInMonth = new Date(
+        currentDisplayMonth.getFullYear(),
+        currentDisplayMonth.getMonth() + 1,
+        0
+    ).getDate();
+    
+    const selectedMonthData = getMonthlyData(data, currentDisplayMonth, false);
+    const selectedMonthWithScheduled = getMonthlyData(data, currentDisplayMonth, true);
+    
+    const lastMonth = new Date(currentDisplayMonth);
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    const lastMonthData = getMonthlyData(data, lastMonth, false);
 
     const ctx = document.getElementById("lineChart").getContext("2d");
 
     if (chartInstance) {
-        chartInstance.data.datasets[0].data = thisMonth;
-        chartInstance.data.datasets[1].data = lastMonth;
-        chartInstance.data.datasets[2].data = thisMonthWithScheduled;
+        chartInstance.data.labels = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+        chartInstance.data.datasets[0].data = selectedMonthData.slice(0, daysInMonth);
+        chartInstance.data.datasets[1].data = lastMonthData.slice(0, daysInMonth);
+        chartInstance.data.datasets[2].data = selectedMonthWithScheduled.slice(0, daysInMonth);
+        chartInstance.options.plugins.title.text = 
+            `${currentDisplayMonth.getFullYear()}年${currentDisplayMonth.getMonth() + 1}月支出趨勢圖`;
         chartInstance.update();
     } else {
         chartInstance = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: Array.from({ length: 31 }, (_, i) => i + 1),
+                labels: Array.from({ length: daysInMonth }, (_, i) => i + 1),
                 datasets: [
                     {
                         label: "本月 (實際支出)",
-                        data: thisMonth,
+                        data: selectedMonthData.slice(0, daysInMonth),
                         borderColor: "orange",
                         fill: false
                     },
                     {
                         label: "上月 (實際支出)",
-                        data: lastMonth,
+                        data: lastMonthData.slice(0, daysInMonth),
                         borderColor: "yellow",
                         fill: false
                     },
                     {
                         label: "本月 (含預約扣款)",
-                        data: thisMonthWithScheduled,
+                        data: selectedMonthWithScheduled.slice(0, daysInMonth),
                         borderColor: "blue",
                         fill: false
                     }
@@ -127,13 +140,16 @@ function initializeCategorySelector() {
 // 根據選擇的類別生成圖表
 function generateComparison(selectedCategory) {
     const data = JSON.parse(localStorage.getItem("expenses")) || [];
-    const today = new Date();
-    const currentMonth = today.toISOString().slice(0, 7); // 本月
-    const lastMonth = new Date(today.getFullYear(), today.getMonth() - 1, 1)
-        .toISOString()
-        .slice(0, 7); // 上月
+    
+    // 使用 currentDisplayMonth 作為當前月份
+    const currentMonth = currentDisplayMonth.toISOString().slice(0, 7);
+    
+    // 計算上個月
+    const lastMonth = new Date(currentDisplayMonth);
+    lastMonth.setMonth(lastMonth.getMonth() - 1);
+    const lastMonthStr = lastMonth.toISOString().slice(0, 7);
 
-    // 濾本月與上月數據
+    // 過濾本月與上月數據
     const currentMonthData = data.filter(
         expense =>
             expense.date.startsWith(currentMonth) &&
@@ -141,7 +157,7 @@ function generateComparison(selectedCategory) {
     );
     const lastMonthData = data.filter(
         expense =>
-            expense.date.startsWith(lastMonth) &&
+            expense.date.startsWith(lastMonthStr) &&
             (selectedCategory === "" || expense.category === selectedCategory)
     );
 
@@ -236,7 +252,7 @@ return totals;
     document.getElementById("comparison-result").innerHTML = "比較結果（百分比）：<br>" + comparisonResult;
 }
 
-// 初始化
+// 初化
 initializeCategorySelector();
 
 
@@ -284,6 +300,7 @@ function addExpense() {
     displaySummary();
     renderChart();
     renderPieChart();
+    initializeCategorySelector(); 
 }
 
 
@@ -325,11 +342,12 @@ function addScheduledExpense() {
     data.push(scheduledExpense);
     localStorage.setItem("expenses", JSON.stringify(data));
 
-    alert("預約扣款已成功新增！");
+    alert("預約扣款已成功新增");
     renderChart();
     renderPieChart(); // 即時更新圓餅圖
     renderScheduledExpenses(); // 即時更新預約列表
     displaySummary();
+    addScheduledExpense()
 }
 
 // 在 HTML 輸入中直接限制日期選擇
@@ -340,142 +358,16 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-function renderChart() {
-    const data = JSON.parse(localStorage.getItem("expenses")) || [];
-    const thisMonthActual = getMonthlyData(data, new Date(), false); // 僅實際支出
-    const thisMonthWithScheduled = getMonthlyData(data, new Date(), true); // 包含預約扣款
-    const lastMonth = getMonthlyData(data, new Date(new Date().setMonth(new Date().getMonth() - 1)), false);
-
-    const ctx = document.getElementById("lineChart").getContext("2d");
-
-    if (chartInstance) {
-        chartInstance.data.datasets[0].data = thisMonthActual;
-        chartInstance.data.datasets[1].data = lastMonth;
-        chartInstance.data.datasets[2].data = thisMonthWithScheduled;
-        chartInstance.update();
-    } else {
-        chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: Array.from({ length: 31 }, (_, i) => i + 1),
-                datasets: [
-                    {
-                        label: "本月 (實際支出)",
-                        data: thisMonthActual,
-                        borderColor: "orange",
-                        fill: false
-                    },
-                    {
-                        label: "上月 (實際支出)",
-                        data: lastMonth,
-                        borderColor: "yellow",
-                        fill: false
-                    },
-                    {
-                        label: "本月 (含預約扣款)",
-                        data: thisMonthWithScheduled,
-                        borderColor: "blue",
-                        fill: false
-                    }
-                ]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: {
-                        title: {
-                            display: true,
-                            text: '日期 (日)'
-                        }
-                    },
-                    y: {
-                        title: {
-                            display: true,
-                            text: '金額 (元)'
-                        },
-                        ticks: {
-                            stepSize: 1000
-                        }
-                    }
-                },
-                plugins: {
-                    legend: {
-                        labels: {
-                            font: {
-                                family: "Arial"
-                            }
-                        }
-                    },
-                    title: {
-                        display: true,
-                        text: "月支出趨勢圖",
-                        font: {
-                            family: "Arial"
-                        }
-                    }
-                }
-            }
-        });
-    }
-}
-
-function addScheduledExpense() {
-    const scheduledDate = document.getElementById("scheduledDate").value;
-    const scheduledAmount = parseFloat(document.getElementById("scheduledAmount").value);
-    const scheduledCategoryInput = document.getElementById("scheduledCategory");
-    const scheduledCategory = scheduledCategoryInput ? scheduledCategoryInput.value : "預約扣款";
-    const scheduledNote = document.getElementById("scheduledNote").value || "無備註";
-
-    if (!scheduledDate || isNaN(scheduledAmount) || !scheduledCategory) {
-        alert("請輸入有效的日期、金額與類別！");
-        return;
-    }
-
-    const scheduledExpense = {
-        date: scheduledDate,
-        amount: -Math.abs(scheduledAmount),
-        note: scheduledNote,
-        category: scheduledCategory,
-        type: "scheduled"
-    };
-
-    let data = JSON.parse(localStorage.getItem("expenses")) || [];
-    data.push(scheduledExpense);
-    localStorage.setItem("expenses", JSON.stringify(data));
-
-    alert("預約扣款已新增");
-    renderChart();
-    renderPieChart(); // 即時更新圓餅圖
-    renderScheduledExpenses(); // 即時更新預約列表
-    displaySummary();
-}
-
-
-function getMonthlyData(data, date, includeScheduled) {
-    const month = date.toISOString().slice(0, 7);
-    const today = new Date().toISOString().split("T")[0];
-    const dailyTotals = Array(31).fill(0);
-
-    data.filter(expense => expense.date.startsWith(month))
-        .forEach(expense => {
-            const day = parseInt(expense.date.split("-")[2]);
-            if (!includeScheduled && expense.type === "scheduled" && expense.date !== today) return; // 當日預約扣款計入
-            dailyTotals[day - 1] += expense.amount;
-        });
-
-    return dailyTotals;
-}
-
 function renderPieChart() {
     const data = JSON.parse(localStorage.getItem("expenses")) || [];
-    const currentMonth = new Date().toISOString().slice(0, 7);
+    // 使用 currentDisplayMonth 替代當前月份
+    const currentMonth = currentDisplayMonth.toISOString().slice(0, 7);
     const today = new Date().toISOString().split("T")[0];
 
-    // 過濾當月資料，並將當日的預約扣款計入實際支出
+    // 過濾選中月份的資料
     const filteredData = data.filter(expense => {
-        if (expense.category === "薪水") return false; // 排除薪水
-        if (expense.type === "scheduled" && expense.date === today) return true; // 當日預約扣款計入
+        if (expense.category === "薪水") return false;
+        if (expense.type === "scheduled" && expense.date === today) return true;
         return expense.date.startsWith(currentMonth);
     });
 
@@ -529,20 +421,51 @@ function renderPieChart() {
 
 function renderTodayExpenses() {
     const data = JSON.parse(localStorage.getItem("expenses")) || [];
-
+    const selectedMonth = currentDisplayMonth.toISOString().slice(0, 7); // 獲取選中月份 YYYY-MM 格式
+    
+    // 過濾中月份的支出
+    const monthlyExpenses = data.filter(expense => expense.date.startsWith(selectedMonth));
+    
     // 按日期升序排列
-    const sortedExpenses = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+    const sortedExpenses = monthlyExpenses.sort((a, b) => new Date(a.date) - new Date(b.date));
 
     const expenseList = document.getElementById("expenseList");
+    
+    // 果該月沒有支出記
+    if (sortedExpenses.length === 0) {
+        expenseList.innerHTML = `<div class="no-expenses">本月尚無支出記錄</div>`;
+        return;
+    }
 
-    // 生成支出列表，顯示日期、類型、金額和備註
-    expenseList.innerHTML = sortedExpenses.map((expense, index) =>
-        `<div>
-    <input type="checkbox" id="expense-${index}">
-    <strong>${expense.date}</strong> (${expense.type === "scheduled" ? "預約扣款" : "實際支出"}) -
-    ${expense.category}: ${Math.abs(expense.amount)} 元 - ${expense.note}
-</div>`
-    ).join("");
+    // 生成表格形式的支出列表
+    const tableHTML = `
+        <table class="expense-table">
+            <thead>
+                <tr>
+                    <th>選擇</th>
+                    <th>日期</th>
+                    <th>類型</th>
+                    <th>類別</th>
+                    <th>金額</th>
+                    <th>備註</th>
+                </tr>
+            </thead>
+            <tbody>
+                ${sortedExpenses.map((expense, index) => `
+                    <tr>
+                        <td><input type="checkbox" id="expense-${index}"></td>
+                        <td>${expense.date}</td>
+                        <td>${expense.type === "scheduled" ? "預約扣款" : "實際支出"}</td>
+                        <td>${expense.category}</td>
+                        <td>${Math.abs(expense.amount)} 元</td>
+                        <td>${expense.note}</td>
+                    </tr>
+                `).join("")}
+            </tbody>
+        </table>
+    `;
+
+    expenseList.innerHTML = tableHTML;
 }
 
 
@@ -638,6 +561,7 @@ function init() {
     renderChart();
     renderPieChart(); // 確保圓餅圖更新
     renderScheduledExpenses(); // 更新預約扣款列表
+    updateMonthDisplay(); // 添加這行
 }
 
 init();
@@ -654,4 +578,43 @@ function hideOtherCharts() {
     const chartsContainer = document.querySelector('.charts-container');
     additionalCharts.classList.remove('visible');
     chartsContainer.classList.remove('expanded');
+}
+
+function changeMonth(delta) {
+    currentDisplayMonth.setMonth(currentDisplayMonth.getMonth() + delta);
+    updateMonthDisplay();
+    renderChart();
+    renderPieChart();
+    generateComparison(document.getElementById("category-select").value);
+    renderTodayExpenses();
+}
+
+function updateMonthDisplay() {
+    const monthNames = ["一月", "二月", "三月", "四月", "五月", "六月", 
+                        "七月", "八月", "九月", "十月", "十一月", "十二月"];
+    document.getElementById("currentMonthDisplay").textContent = 
+        `${currentDisplayMonth.getFullYear()}年 ${monthNames[currentDisplayMonth.getMonth()]}`;
+}
+
+function getMonthlyData(data, date, includeScheduled) {
+    const month = date.toISOString().slice(0, 7);
+    const today = new Date().toISOString().split("T")[0];
+    const daysInMonth = new Date(
+        date.getFullYear(),
+        date.getMonth() + 1,
+        0
+    ).getDate();
+    
+    const dailyTotals = Array(daysInMonth).fill(0);
+
+    data.filter(expense => expense.date.startsWith(month))
+        .forEach(expense => {
+            const day = parseInt(expense.date.split("-")[2]);
+            if (!includeScheduled && expense.type === "scheduled" && expense.date !== today) return;
+            if (day <= daysInMonth) { // 確保日期在當月範圍內
+                dailyTotals[day - 1] += expense.amount;
+            }
+        });
+
+    return dailyTotals;
 }
