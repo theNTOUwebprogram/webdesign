@@ -136,6 +136,41 @@
         .month-selector button:hover {
             background-color: #555;
         }
+
+        .expense-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            background-color: #444;
+            border-radius: 8px;
+            overflow: hidden;
+        }
+
+        .expense-table th,
+        .expense-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #555;
+        }
+
+        .expense-table th {
+            background-color: #2c2c2c;
+            font-weight: bold;
+        }
+
+        .expense-table tr:hover {
+            background-color: #505050;
+        }
+
+        .expense-table input[type="checkbox"] {
+            cursor: pointer;
+        }
+
+        .no-expenses {
+            text-align: center;
+            padding: 20px;
+            color: #888;
+        }
     </style>
 </head>
 
@@ -641,20 +676,51 @@
 
         function renderTodayExpenses() {
             const data = JSON.parse(localStorage.getItem("expenses")) || [];
-
+            const selectedMonth = currentDisplayMonth.toISOString().slice(0, 7); // 獲取選中月份 YYYY-MM 格式
+            
+            // 過濾選中月份的支出
+            const monthlyExpenses = data.filter(expense => expense.date.startsWith(selectedMonth));
+            
             // 按日期升序排列
-            const sortedExpenses = data.sort((a, b) => new Date(a.date) - new Date(b.date));
+            const sortedExpenses = monthlyExpenses.sort((a, b) => new Date(a.date) - new Date(b.date));
 
             const expenseList = document.getElementById("expenseList");
+            
+            // 如果該月沒有支出記錄
+            if (sortedExpenses.length === 0) {
+                expenseList.innerHTML = `<div class="no-expenses">本月尚無支出記錄</div>`;
+                return;
+            }
 
-            // 生成支出列表，顯示日期、類型、金額和備註
-            expenseList.innerHTML = sortedExpenses.map((expense, index) =>
-                `<div>
-            <input type="checkbox" id="expense-${index}">
-            <strong>${expense.date}</strong> (${expense.type === "scheduled" ? "預約扣款" : "實際支出"}) -
-            ${expense.category}: ${Math.abs(expense.amount)} 元 - ${expense.note}
-        </div>`
-            ).join("");
+            // 生成表格形式的支出列表
+            const tableHTML = `
+                <table class="expense-table">
+                    <thead>
+                        <tr>
+                            <th>選擇</th>
+                            <th>日期</th>
+                            <th>類型</th>
+                            <th>類別</th>
+                            <th>金額</th>
+                            <th>備註</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${sortedExpenses.map((expense, index) => `
+                            <tr>
+                                <td><input type="checkbox" id="expense-${index}"></td>
+                                <td>${expense.date}</td>
+                                <td>${expense.type === "scheduled" ? "預約扣款" : "實際支出"}</td>
+                                <td>${expense.category}</td>
+                                <td>${Math.abs(expense.amount)} 元</td>
+                                <td>${expense.note}</td>
+                            </tr>
+                        `).join("")}
+                    </tbody>
+                </table>
+            `;
+
+            expenseList.innerHTML = tableHTML;
         }
 
 
@@ -773,8 +839,9 @@
             currentDisplayMonth.setMonth(currentDisplayMonth.getMonth() + delta);
             updateMonthDisplay();
             renderChart();
-            renderPieChart();  // 更新圓餅圖
-            generateComparison(document.getElementById("category-select").value);  // 更新柱狀圖
+            renderPieChart();
+            generateComparison(document.getElementById("category-select").value);
+            renderTodayExpenses();
         }
 
         function updateMonthDisplay() {
