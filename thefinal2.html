@@ -171,86 +171,273 @@
             padding: 20px;
             color: #888;
         }
+
+        /* 添加側邊欄樣式 */
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 250px;
+            height: 100%;
+            background-color: #444;
+            padding: 20px;
+            box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+            overflow-y: auto;
+        }
+
+        /* 側邊欄區塊樣式 */
+        .sidebar-section {
+            margin-bottom: 30px;
+            padding: 15px;
+            background-color: #333;
+            border-radius: 8px;
+        }
+
+        /* 標題樣式 */
+        .sidebar h2 {
+            color: aliceblue;
+            margin-bottom: 15px;
+            font-size: 1.2em;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #555;
+        }
+
+        /* 類別選項樣式 */
+        .category-options {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 15px;
+        }
+
+        .category-options label {
+            margin-bottom: 8px;
+            color: aliceblue;
+        }
+
+        /* 輸入框和下拉選單統一樣式 */
+        .sidebar input[type="number"],
+        .sidebar input[type="text"],
+        .sidebar input[type="date"],
+        .sidebar select {
+            width: 100%;
+            padding: 8px;
+            margin-bottom: 12px;
+            border: none;
+            border-radius: 4px;
+            background-color: #555;
+            color: aliceblue;
+            font-size: 14px;
+            box-sizing: border-box;
+        }
+
+        /* 按鈕樣式 */
+        .sidebar button {
+            width: 100%;
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #666;
+            color: aliceblue;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .sidebar button:hover {
+            background-color: #777;
+        }
+
+        /* 滾動條樣式 */
+        .sidebar::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+
+        /* 主內容區域 */
+        .main-content {
+            margin-left: 270px;
+            padding: 20px;
+        }
+
+        /* 調整現有元素樣式 */
+        .font-selector {
+            right: 20px;
+        }
+
+        /* 自定義側邊欄滾動條樣式 */
+        .sidebar::-webkit-scrollbar {
+            width: 8px;  /* 滾動條寬度 */
+        }
+
+        .sidebar::-webkit-scrollbar-track {
+            background: #444;  /* 滾動條軌道背景色 */
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb {
+            background: #666;  /* 滾動條顏色 */
+            border-radius: 4px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover {
+            background: #777;  /* 滾動條懸停時的顏色 */
+        }
+
+        /* 類別選項樣式 */
+        .category-options {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;  /* 選項之間的間距 */
+            margin-bottom: 15px;
+        }
+
+        .category-options label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: aliceblue;
+        }
+
+        /* 圖表容器的滾動條樣式 */
+        #chartContainer::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;  /* 添加水平滾動條的高度 */
+        }
+
+        #chartContainer::-webkit-scrollbar-track {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        #chartContainer::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 4px;
+        }
+
+        #chartContainer::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
+
+        /* 比較圖表的滾動條樣式 */
+        #comparison-chart::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        #comparison-chart::-webkit-scrollbar-track {
+            background: #444;
+            border-radius: 4px;
+        }
+
+        #comparison-chart::-webkit-scrollbar-thumb {
+            background: #666;
+            border-radius: 4px;
+        }
+
+        #comparison-chart::-webkit-scrollbar-thumb:hover {
+            background: #777;
+        }
     </style>
 </head>
 
 <body>
-    <h1>local accounting system</h1>
-    <p id="todayDate"></p>
-    <h2>月總結</h2>
-    <p id="monthlyTotal"></p>
-    <h1 id="monthlyRemaining"></h1>
-    <div class="font-selector">
-        <select id="fontSelector" onchange="changeFont()">
-            <option value="Arial">Arial</option>
-            <option value="Courier New">Courier New</option>
-            <option value="Georgia">Georgia</option>
-            <option value="Times New Roman">Times New Roman</option>
-            <option value="Verdana">Verdana</option>
-        </select>
-    </div>
-
-    <div class="charts-container">
-        <div class="month-selector">
-            <button onclick="changeMonth(-1)">上個月</button>
-            <span id="currentMonthDisplay"></span>
-            <button onclick="changeMonth(1)">下個月</button>
-        </div>
-        <div id="chartContainer"onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
-            <canvas id="lineChart"></canvas>
-        </div>
-
-        <div class="charts-row" id="additional-charts">
-            <div id="pieChartContainer" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
-                <canvas id="pieChart"></canvas>
+    <!-- 添加側邊欄 -->
+    <div class="sidebar">
+        <div class="sidebar-section">
+            <h2>新增支出</h2>
+            <div class="category-options">
+                <label><input type="radio" name="expenseCategory" value="交通"> 交通</label>
+                <label><input type="radio" name="expenseCategory" value="吃飯"> 吃飯</label>
+                <label><input type="radio" name="expenseCategory" value="投資"> 投資</label>
+                <label><input type="radio" name="expenseCategory" value="零食"> 零食</label>
+                <label><input type="radio" name="expenseCategory" value="薪水"> 薪水</label>
             </div>
-            
-            <div id="comparison-chart-wrapper">
-                <canvas id="comparison-chart" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()"></canvas>
-                <h3 id="comparison-result"></h3>
-            </div>
+            <input type="number" id="expenseAmount" placeholder="金額">
+            <input type="text" id="expenseNote" placeholder="備註 (可選)">
+            <button id="addExpenseBtn" onclick="addExpense()">新增支出</button>
+        </div>
+
+        <div class="sidebar-section">
+            <h2>新增預約扣款</h2>
+            <input type="date" id="scheduledDate" placeholder="預約日期">
+            <input type="number" id="scheduledAmount" placeholder="金額">
+            <select id="scheduledCategory">
+                <option value="交通">交通</option>
+                <option value="吃飯">吃飯</option>
+                <option value="投資">投資</option>
+                <option value="零食">零食</option>
+            </select>
+            <input type="text" id="scheduledNote" placeholder="備註 (可選)">
+            <button id="addScheduledBtn" onclick="addScheduledExpense()">新增預約扣款</button>
+        </div>
+
+        <div class="sidebar-section">
+            <h2>類別篩選</h2>
+            <select id="category-select">
+                <option value="">全部</option>
+                <!-- 程式會動態填充選項 -->
+            </select>
         </div>
     </div>
 
-    <h2>新增預約扣款</h2>
-    <div>
-        <input type="date" id="scheduledDate" placeholder="預約日期">
-        <input type="number" id="scheduledAmount" placeholder="金額">
-        <select id="scheduledCategory">
-            <option value="交通">交通</option>
-            <option value="吃飯">吃飯</option>
-            <option value="投資">投資</option>
-            <option value="零食">零食</option>
-        </select>
-        <input type="text" id="scheduledNote" placeholder="備註 (可選)">
-        <button id="addScheduledBtn" onclick="addScheduledExpense()">新增預約扣款</button>
+    <!-- 將現有內容包裝在 main-content div 中 -->
+    <div class="main-content">
+        <!-- 將原本的新增支出和預約扣款表單從這裡移除 -->
+        <!-- 保留其他所有內容 -->
+        <h1>local accounting system</h1>
+        <p id="todayDate"></p>
+        <h2>月總結</h2>
+        <p id="monthlyTotal"></p>
+        <h1 id="monthlyRemaining"></h1>
+        <div class="font-selector">
+            <select id="fontSelector" onchange="changeFont()">
+                <option value="Arial">Arial</option>
+                <option value="Courier New">Courier New</option>
+                <option value="Georgia">Georgia</option>
+                <option value="Times New Roman">Times New Roman</option>
+                <option value="Verdana">Verdana</option>
+            </select>
+        </div>
+
+        <div class="charts-container">
+            <div class="month-selector">
+                <button onclick="changeMonth(-1)">上個月</button>
+                <span id="currentMonthDisplay"></span>
+                <button onclick="changeMonth(1)">下個月</button>
+            </div>
+            <div id="chartContainer"onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
+                <canvas id="lineChart"></canvas>
+            </div>
+
+            <div class="charts-row" id="additional-charts">
+                <div id="pieChartContainer" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
+                    <canvas id="pieChart"></canvas>
+                </div>
+                
+                <div id="comparison-chart-wrapper">
+                    <canvas id="comparison-chart" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()"></canvas>
+                    <h3 id="comparison-result"></h3>
+                </div>
+            </div>
+        </div>
+
+        <h2>今日支出</h2>
+        <button id="clearSelectedBtn" onclick="clearSelected()">清除勾選的今日項目</button>
+        <div id="expenseList"></div>
     </div>
 
-    <h2>新增支出</h2>
-    <div class="category-options">
-        <label><input type="radio" name="expenseCategory" value="交通"> 交通</label>
-        <label><input type="radio" name="expenseCategory" value="吃飯"> 吃飯</label>
-        <label><input type="radio" name="expenseCategory" value="投資"> 投資</label>
-        <label><input type="radio" name="expenseCategory" value="零食"> 零食</label>
-        <label><input type="radio" name="expenseCategory" value="薪水"> 薪水</label>
-    </div>
-    <input type="number" id="expenseAmount" placeholder="金額">
-    <input type="text" id="expenseNote" placeholder="備註 (可選)">
-    <button id="addExpenseBtn" onclick="addExpense()">新增支出</button>
-    <div>
-        <label for="category-select">選擇類別：</label>
-        <select id="category-select">
-            <option value="">全部</option>
-            <!-- 程式會動態填充選項 -->
-        </select>
-    </div>
-
-    <h2>今日支出</h2>
-    <button id="clearSelectedBtn" onclick="clearSelected()">清除勾選的今日項目</button>
-    <div id="expenseList"></div>
-    
-
-   
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script>
         let chartInstance = null;
@@ -507,7 +694,7 @@
             document.getElementById("comparison-result").innerHTML = "比較結果（百分比）：<br>" + comparisonResult;
         }
 
-        // 初始化
+        // 初化
         initializeCategorySelector();
 
 
@@ -678,7 +865,7 @@
             const data = JSON.parse(localStorage.getItem("expenses")) || [];
             const selectedMonth = currentDisplayMonth.toISOString().slice(0, 7); // 獲取選中月份 YYYY-MM 格式
             
-            // 過濾選中月份的支出
+            // 過濾中月份的支出
             const monthlyExpenses = data.filter(expense => expense.date.startsWith(selectedMonth));
             
             // 按日期升序排列
@@ -686,7 +873,7 @@
 
             const expenseList = document.getElementById("expenseList");
             
-            // 如果該月沒有支出記錄
+            // 果該月沒有支出記
             if (sortedExpenses.length === 0) {
                 expenseList.innerHTML = `<div class="no-expenses">本月尚無支出記錄</div>`;
                 return;
