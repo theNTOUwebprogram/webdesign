@@ -23,14 +23,7 @@ function changeFont() {
 
 function renderChart() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
-    
+    let data = data_encrypt(encryptedData);
     // 獲取當前月份的天數
     const daysInMonth = new Date(
         currentDisplayMonth.getFullYear(),
@@ -124,13 +117,7 @@ function renderChart() {
 // 初始化，填充下拉選單
 function initializeCategorySelector() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     const uniqueCategories = Array.from(new Set(data.map(expense => expense.category)));
     const selectElement = document.getElementById("category-select");
     selectElement.innerHTML = ""; // 確保不會重複添加選項
@@ -156,13 +143,7 @@ function initializeCategorySelector() {
 // 根據選擇的類別生成圖表
 function generateComparison(selectedCategory) {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     
     // 使用 currentDisplayMonth 作為當前月份
     const currentMonth = currentDisplayMonth.toISOString().slice(0, 7);
@@ -301,13 +282,7 @@ function addExpense() {
     };
 
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     data.push(expense);
     ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), account_name+"-expenses").toString();
     localStorage.setItem(account_name+"-expenses", ciphertext);
@@ -365,13 +340,7 @@ function addScheduledExpense() {
 
     // 儲存本地資料
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     data.push(scheduledExpense);
     ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), account_name+"-expenses").toString();
     localStorage.setItem(account_name+"-expenses", ciphertext);
@@ -394,13 +363,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
 function renderPieChart() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     // 使用 currentDisplayMonth 替代當前月份
     const currentMonth = currentDisplayMonth.toISOString().slice(0, 7);
     const today = new Date().toISOString().split("T")[0];
@@ -462,13 +425,7 @@ function renderPieChart() {
 
 function renderTodayExpenses() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     const selectedMonth = currentDisplayMonth.toISOString().slice(0, 7); // 獲取選中月份 YYYY-MM 格式
     
     // 過濾中月份的支出
@@ -520,13 +477,7 @@ function renderTodayExpenses() {
 function clearSelected() {
     const checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
 
     checkboxes.forEach(checkbox => {
         const index = checkbox.id.split("-")[1];
@@ -542,13 +493,7 @@ function clearSelected() {
 
 function renderScheduledExpenses() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     const scheduledExpenses = data.filter(expense => expense.type === "scheduled");
 
     const scheduledList = document.getElementById("scheduledList");
@@ -559,22 +504,16 @@ function renderScheduledExpenses() {
     }
 
     scheduledList.innerHTML = scheduledExpenses.map((expense, index) => `
-<div>
-    <input type="checkbox" id="scheduled-${index}">
-    日期：${expense.date}，類型：${expense.category}，金額：${Math.abs(expense.amount)} 元
-</div>
-`).join("");
+    <div>
+        <input type="checkbox" id="scheduled-${index}">
+        日期：${expense.date}，類型：${expense.category}，金額：${Math.abs(expense.amount)} 元
+    </div>
+    `).join("");
 }
 
 function displaySummary() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     const today = new Date();
     const month = today.toISOString().slice(0, 7);
     const todayDate = today.toISOString().split("T")[0];
@@ -609,13 +548,7 @@ function displaySummary() {
 
 function init() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data;
-    if (encryptedData) {
-        data = JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
-    }
-    else {
-        data = [];
-    }
+    let data = data_encrypt(encryptedData);
     const today = new Date().toISOString().split("T")[0];
 
     // 檢查當日預約扣款，並將其轉為實際支出
@@ -692,6 +625,15 @@ function getMonthlyData(data, date, includeScheduled) {
         });
 
     return dailyTotals;
+}
+
+function data_encrypt(encryptedData) {
+    if (encryptedData) {
+        return JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
+    }
+    else {
+        return [];
+    }
 }
 
 window.addEventListener("load", init, false);
