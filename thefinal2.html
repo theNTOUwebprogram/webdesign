@@ -349,6 +349,35 @@
         #comparison-chart::-webkit-scrollbar-thumb:hover {
             background: #777;
         }
+
+        .category-buttons {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+        .category-btn {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            background-color: #555;
+            color: aliceblue;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+
+        .category-btn:hover {
+            background-color: #666;
+        }
+
+        .salary-btn {
+            background-color: #2d6a4f;
+        }
+
+        .salary-btn:hover {
+            background-color: #40916c;
+        }
     </style>
 </head>
 
@@ -356,31 +385,22 @@
     <!-- 添加側邊欄 -->
     <div class="sidebar">
         <div class="sidebar-section">
-            <h2>新增支出</h2>
-            <div class="category-options">
-                <label><input type="radio" name="expenseCategory" value="交通"> 交通</label>
-                <label><input type="radio" name="expenseCategory" value="吃飯"> 吃飯</label>
-                <label><input type="radio" name="expenseCategory" value="投資"> 投資</label>
-                <label><input type="radio" name="expenseCategory" value="零食"> 零食</label>
-                <label><input type="radio" name="expenseCategory" value="薪水"> 薪水</label>
-            </div>
+            <h2>新增支出/預約</h2>
+            <input type="date" id="expenseDate" value="">
             <input type="number" id="expenseAmount" placeholder="金額">
             <input type="text" id="expenseNote" placeholder="備註 (可選)">
-            <button id="addExpenseBtn" onclick="addExpense()">新增支出</button>
-        </div>
-
-        <div class="sidebar-section">
-            <h2>新增預約扣款</h2>
-            <input type="date" id="scheduledDate" placeholder="預約日期">
-            <input type="number" id="scheduledAmount" placeholder="金額">
-            <select id="scheduledCategory">
-                <option value="交通">交通</option>
-                <option value="吃飯">吃飯</option>
-                <option value="投資">投資</option>
-                <option value="零食">零食</option>
-            </select>
-            <input type="text" id="scheduledNote" placeholder="備註 (可選)">
-            <button id="addScheduledBtn" onclick="addScheduledExpense()">新增預約扣款</button>
+            <div class="category-buttons">
+                <button class="category-btn" onclick="addExpenseWithCategory('交通')">交通</button>
+                <button class="category-btn" onclick="addExpenseWithCategory('早餐')">早餐</button>
+                <button class="category-btn" onclick="addExpenseWithCategory('中餐')">中餐</button>
+                <button class="category-btn" onclick="addExpenseWithCategory('晚餐')">晚餐</button>
+                <button class="category-btn" onclick="addExpenseWithCategory('投資')">投資</button>
+                <button class="category-btn" onclick="addExpenseWithCategory('零食')">零食</button>
+                <button class="category-btn" onclick="addExpenseWithCategory('娛樂')">娛樂</button>
+                <button class="category-btn" onclick="addExpenseWithCategory('飲料')">飲料</button>
+                <button class="category-btn salary-btn" onclick="addExpenseWithCategory('薪水')">薪水</button>
+                <button class="category-btn salary-btn" onclick="addExpenseWithCategory('bonus')">Bonus</button>
+            </div>
         </div>
 
         <div class="sidebar-section">
@@ -697,108 +717,58 @@
         // 初化
         initializeCategorySelector();
 
-
-
-        function addExpense() {
+        function addExpenseWithCategory(category) {
+            const expenseDate = document.getElementById("expenseDate").value;
             const expenseAmount = parseFloat(document.getElementById("expenseAmount").value);
             const expenseNote = document.getElementById("expenseNote").value || "無備註";
-            const expenseCategory = document.querySelector("input[name='expenseCategory']:checked");
+            const today = new Date().toISOString().split("T")[0];
 
             if (!expenseAmount || isNaN(expenseAmount)) {
                 alert("請輸入有效的金額！");
                 return;
             }
 
-            if (!expenseCategory) {
-                alert("請選擇一個類別！");
+            if (!expenseDate) {
+                alert("請選擇日期！");
                 return;
             }
 
-            const isSalary = expenseCategory.value === "薪水";
+            const isIncome = category === "薪水" || category === "bonus";
+            const expenseType = expenseDate > today ? "scheduled" : "actual";
 
             const expense = {
-                date: new Date().toISOString().split("T")[0],
-                amount: isSalary ? Math.abs(expenseAmount) : -Math.abs(expenseAmount),
-                category: expenseCategory.value,
+                date: expenseDate,
+                amount: isIncome ? Math.abs(expenseAmount) : -Math.abs(expenseAmount),
+                category: category,
                 note: expenseNote,
-                type: "actual" // 實際支出
+                type: expenseType
             };
 
             let data = JSON.parse(localStorage.getItem("expenses")) || [];
             data.push(expense);
             localStorage.setItem("expenses", JSON.stringify(data));
 
-            alert("支出已新增！");
+            alert(expenseType === "scheduled" ? "預約支出已新增！" : "支出已新增！");
 
             // 清空表單輸入欄位
+            document.getElementById("expenseDate").value = today;
             document.getElementById("expenseAmount").value = "";
             document.getElementById("expenseNote").value = "";
-            if (expenseCategory) {
-                expenseCategory.checked = false; // 清除選中類別
-            }
 
             // 更新視圖
             renderTodayExpenses();
             displaySummary();
             renderChart();
             renderPieChart();
-           initializeCategorySelector(); 
+            initializeCategorySelector();
         }
 
-
-        function addScheduledExpense() {
-            const scheduledDateInput = document.getElementById("scheduledDate");
-            const scheduledDate = scheduledDateInput.value;
-            const scheduledAmount = parseFloat(document.getElementById("scheduledAmount").value);
-            const scheduledCategoryInput = document.getElementById("scheduledCategory");
-            const scheduledCategory = scheduledCategoryInput ? scheduledCategoryInput.value : "預約扣款";
-            const scheduledNote = document.getElementById("scheduledNote").value || "無備註";
-
-            // 日期檢查 - 前端限制
-            const today = new Date();
-            today.setHours(0, 0, 0, 0); // 今日日期重置時間為 00:00:00
-            const inputDate = new Date(scheduledDate);
-
-            if (!scheduledDate || inputDate <= today) {
-                alert("預約扣款的日期不能為當日或之前！請重新輸入有效日期。");
-                return;
-            }
-
-            // 金額檢查
-            if (isNaN(scheduledAmount) || scheduledAmount <= 0) {
-                alert("請輸入有效的扣款金額！");
-                return;
-            }
-
-            // 建立預約扣款資料
-            const scheduledExpense = {
-                date: scheduledDate,
-                amount: -Math.abs(scheduledAmount),
-                note: scheduledNote,
-                category: scheduledCategory,
-                type: "scheduled"
-            };
-
-            // 儲存本地資料
-            let data = JSON.parse(localStorage.getItem("expenses")) || [];
-            data.push(scheduledExpense);
-            localStorage.setItem("expenses", JSON.stringify(data));
-
-            alert("預約扣款已成功新增");
-            renderChart();
-            renderPieChart(); // 即時更新圓餅圖
-            renderScheduledExpenses(); // 即時更新預約列表
-            displaySummary();
-            addScheduledExpense()
-        }
-
-        // 在 HTML 輸入中直接限制日期選擇
+        // 在頁面載入時設置日期預設值為今天
         document.addEventListener("DOMContentLoaded", () => {
-            const scheduledDateInput = document.getElementById("scheduledDate");
-            const today = new Date().toISOString().split("T")[0]; // 取得今日的 YYYY-MM-DD 格式
-            scheduledDateInput.setAttribute("min", today); // 限制最小日期為今日
+            const expenseDateInput = document.getElementById("expenseDate");
+            const today = new Date().toISOString().split("T")[0];
+            expenseDateInput.value = today;
         });
-
 
         function renderPieChart() {
             const data = JSON.parse(localStorage.getItem("expenses")) || [];
@@ -927,25 +897,6 @@
             renderPieChart(); // 更新圓餅圖
         }
 
-        function renderScheduledExpenses() {
-            const data = JSON.parse(localStorage.getItem("expenses")) || [];
-            const scheduledExpenses = data.filter(expense => expense.type === "scheduled");
-
-            const scheduledList = document.getElementById("scheduledList");
-
-            if (scheduledExpenses.length === 0) {
-                scheduledList.innerHTML = "<p>目前無預約扣款項目。</p>";
-                return;
-            }
-
-            scheduledList.innerHTML = scheduledExpenses.map((expense, index) => `
-        <div>
-            <input type="checkbox" id="scheduled-${index}">
-            日期：${expense.date}，類型：${expense.category}，金額：${Math.abs(expense.amount)} 元
-        </div>
-    `).join("");
-        }
-
         function displaySummary() {
             const data = JSON.parse(localStorage.getItem("expenses")) || [];
             const today = new Date();
@@ -955,14 +906,14 @@
             // 當月資料
             const monthlyExpenses = data.filter(expense => expense.date.startsWith(month));
 
-            // 獲取薪水總額
-            const salary = monthlyExpenses
-                .filter(expense => expense.category === "薪水" && expense.type === "actual")
+            // 獲取薪水和 bonus 總額
+            const income = monthlyExpenses
+                .filter(expense => (expense.category === "薪水" || expense.category === "bonus") && expense.type === "actual")
                 .reduce((sum, expense) => sum + expense.amount, 0);
 
-            // 實際支出 (負數，非薪水)
+            // 實際支出 (負數，非薪水和非 bonus)
             const actualExpenses = monthlyExpenses
-                .filter(expense => expense.type === "actual" && expense.category !== "薪水")
+                .filter(expense => expense.type === "actual" && expense.category !== "薪水" && expense.category !== "bonus")
                 .reduce((sum, expense) => sum + expense.amount, 0);
 
             // 當日預約扣款 (負)
@@ -970,8 +921,8 @@
                 .filter(expense => expense.type === "scheduled" && expense.date === todayDate)
                 .reduce((sum, expense) => sum + expense.amount, 0);
 
-            // 剩餘金額 = 薪水 - 實際支出 - 當日預約扣款
-            const remaining = salary - Math.abs(actualExpenses) - Math.abs(todayScheduledExpenses);
+            // 剩餘金額 = 收入(薪水+bonus) - 實際支出 - 當日預約扣款
+            const remaining = income - Math.abs(actualExpenses) - Math.abs(todayScheduledExpenses);
 
             // 更新顯示
             document.getElementById("todayDate").textContent = "今日日期：" + todayDate;
