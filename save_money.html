@@ -13,33 +13,30 @@
     <body>
         <div class="sidebar">
             <div class="sidebar-section">
-                <h2>新增支出</h2>
-                <div class="category-options">
-                    <label><input type="radio" name="expenseCategory" value="交通"> 交通</label>
-                    <label><input type="radio" name="expenseCategory" value="吃飯"> 吃飯</label>
-                    <label><input type="radio" name="expenseCategory" value="投資"> 投資</label>
-                    <label><input type="radio" name="expenseCategory" value="零食"> 零食</label>
-                    <label><input type="radio" name="expenseCategory" value="薪水"> 薪水</label>
-                </div>
+                <h2>新增支出/預約</h2>
+                <input type="date" id="expenseDate" value="">
                 <input type="number" id="expenseAmount" placeholder="金額">
+                <div class="quick-amount-buttons">
+                        <button class="amount-btn" onclick="addAmount(1000)">+1000</button>
+                        <button class="amount-btn" onclick="addAmount(500)">+500</button>
+                        <button class="amount-btn" onclick="addAmount(100)">+100</button>
+                        <button class="amount-btn" onclick="addAmount(50)">+50</button>
+                        <button class="amount-btn" onclick="addAmount(10)">+10</button>
+                </div>
                 <input type="text" id="expenseNote" placeholder="備註 (可選)">
-                <button id="addExpenseBtn" onclick="addExpense()">新增支出</button>
+                <div class="category-buttons">
+                    <button class="category-btn" onclick="addExpenseWithCategory('交通')">交通</button>
+                    <button class="category-btn" onclick="addExpenseWithCategory('早餐')">早餐</button>
+                    <button class="category-btn" onclick="addExpenseWithCategory('中餐')">中餐</button>
+                    <button class="category-btn" onclick="addExpenseWithCategory('晚餐')">晚餐</button>
+                    <button class="category-btn" onclick="addExpenseWithCategory('投資')">投資</button>
+                    <button class="category-btn" onclick="addExpenseWithCategory('零食')">零食</button>
+                    <button class="category-btn" onclick="addExpenseWithCategory('娛樂')">娛樂</button>
+                    <button class="category-btn" onclick="addExpenseWithCategory('飲料')">飲料</button>
+                    <button class="category-btn salary-btn" onclick="addExpenseWithCategory('薪水')">薪水</button>
+                    <button class="category-btn salary-btn" onclick="addExpenseWithCategory('bonus')">Bonus</button>
+                </div>
             </div>
-    
-            <div class="sidebar-section">
-                <h2>新增預約扣款</h2>
-                <input type="date" id="scheduledDate" placeholder="預約日期">
-                <input type="number" id="scheduledAmount" placeholder="金額">
-                <select id="scheduledCategory">
-                    <option value="交通">交通</option>
-                    <option value="吃飯">吃飯</option>
-                    <option value="投資">投資</option>
-                    <option value="零食">零食</option>
-                </select>
-                <input type="text" id="scheduledNote" placeholder="備註 (可選)">
-                <button id="addScheduledBtn" onclick="addScheduledExpense()">新增預約扣款</button>
-            </div>
-    
             <div class="sidebar-section">
                 <h2>類別篩選</h2>
                 <select id="category-select">
@@ -55,7 +52,6 @@
             <!-- 保留其他所有內容 -->
             <h1>local accounting system</h1>
             <p id="todayDate"></p>
-            <h2>月總結</h2>
             <p id="monthlyTotal"></p>
             <h1 id="monthlyRemaining"></h1>
             <div class="font-selector">
@@ -74,7 +70,7 @@
                     <span id="currentMonthDisplay"></span>
                     <button onclick="changeMonth(1)">下個月</button>
                 </div>
-                <div id="chartContainer"onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
+                <div id="chartContainer" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
                     <canvas id="lineChart"></canvas>
                 </div>
     
@@ -82,9 +78,10 @@
                     <div id="pieChartContainer" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()">
                         <canvas id="pieChart"></canvas>
                     </div>
-                    
+    
                     <div id="comparison-chart-wrapper">
-                        <canvas id="comparison-chart" onmouseover="showOtherCharts()" onmouseleave="hideOtherCharts()"></canvas>
+                        <canvas id="comparison-chart" onmouseover="showOtherCharts()"
+                            onmouseleave="hideOtherCharts()"></canvas>
                         <h3 id="comparison-result"></h3>
                     </div>
                 </div>
