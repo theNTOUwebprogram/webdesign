@@ -47,7 +47,7 @@ function login() {
                 accountInput.value = "";
                 passwordInput.value = "";
                 flag = 1;
-                window.location.href = 'save_money.html';
+                sendValue(localStorage.key(i));
                 break;
             }
             else if (localStorage.key(i) === account) {
@@ -97,6 +97,7 @@ function generateAccount() {
         else {
             localStorage.setItem(account, key);
             window.alert("帳號創建成功\n帳號:" + account + "\n密碼:" + password);
+            sendValue(localStorage.key(account));
         }
         accountInput.value = "";
         passwordInput.value = "";
@@ -144,6 +145,22 @@ function deleteAccount() {
             passwordInput.value = "";
         }
     }
+}
+
+function sendValue(value) {
+    const receiverWindow = window.open("save_money.html"); // 開啟另一個頁面
+
+    if (!receiverWindow) {
+        return;
+    }
+
+    // 確保目標頁面完全載入後執行 postMessage
+    const checkReady = setInterval(() => {
+        if (receiverWindow && receiverWindow.document.readyState === "complete") {
+            receiverWindow.postMessage(value, "*"); // 傳遞數據
+            clearInterval(checkReady); // 停止檢查
+        }
+    }, 100);
 }
 
 window.addEventListener("load", start, false);
