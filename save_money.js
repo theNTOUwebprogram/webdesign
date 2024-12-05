@@ -56,19 +56,19 @@ function renderChart() {
                 labels: Array.from({ length: daysInMonth }, (_, i) => i + 1),
                 datasets: [
                     {
-                        label: "本月 (實際支出)",
+                        label: "本月 (實際收支)",
                         data: selectedMonthData.slice(0, daysInMonth),
                         borderColor: "orange",
                         fill: false
                     },
                     {
-                        label: "上月 (實際支出)",
+                        label: "上月 (實際收支)",
                         data: lastMonthData.slice(0, daysInMonth),
                         borderColor: "yellow",
                         fill: false
                     },
                     {
-                        label: "本月 (含預約扣款)",
+                        label: "本月 (含預約紀錄)",
                         data: selectedMonthWithScheduled.slice(0, daysInMonth),
                         borderColor: "blue",
                         fill: false
@@ -290,7 +290,7 @@ function addExpenseWithCategory(category) {
     ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), account_name+"-expenses").toString();
     localStorage.setItem(account_name+"-expenses", ciphertext);
 
-    alert(expenseType === "scheduled" ? "預約支出已新增！" : "支出已新增！");
+    alert( expenseType === "scheduled" ? "預約支出/收入已新增！" : "支出/收入已新增！");
 
     // 清空表單輸入欄位
     document.getElementById("expenseDate").value = today;
@@ -377,6 +377,7 @@ function renderPieChart() {
 function renderTodayExpenses() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
     let data = data_decrypt(encryptedData);
+    
     const selectedMonth = currentDisplayMonth.toISOString().slice(0, 7); // 獲取選中月份 YYYY-MM 格式
 
     // 過濾中月份的支出
@@ -385,11 +386,11 @@ function renderTodayExpenses() {
     // 按日期升序排列
     const sortedExpenses = monthlyExpenses.sort((a, b) => new Date(a.date) - new Date(b.date));
 
-    const expenseList = document.getElementById("expenseList");
-
+    let expenseList = document.getElementById("expenseList");
     // 果該月沒有支出記
     if (sortedExpenses.length === 0) {
-        expenseList.innerHTML = `<div class="no-expenses">本月尚無支出記錄</div>`;
+        expenseList.innerHTML = '<div class="no-expenses">本月尚無支出記錄</div>';
+        
         return;
     }
 
@@ -411,7 +412,7 @@ function renderTodayExpenses() {
                     <tr>
                         <td><input type="checkbox" id="expense-${index}"></td>
                         <td>${expense.date}</td>
-                        <td>${expense.type === "scheduled" ? "預約扣款" : "實際支出"}</td>
+                        <td>${expense.category === "薪水" || expense.category === "bonus" ? "實際收入" : (expense.type === "scheduled" ? "預約扣款" : "實際支出")}</td>
                         <td>${expense.category}</td>
                         <td>${Math.abs(expense.amount)} 元</td>
                         <td>${expense.note}</td>
@@ -422,6 +423,7 @@ function renderTodayExpenses() {
     `;
 
     expenseList.innerHTML = tableHTML;
+    
 }
 
 
@@ -469,7 +471,7 @@ function displaySummary() {
         .reduce((sum, expense) => sum + expense.amount, 0);
 
     // 剩餘金額 = 收入(薪水+bonus) - 實際支出 - 當日預約扣款
-    const remaining = income - Math.abs(actualExpenses) - Math.abs(todayScheduledExpenses);
+    let remaining = income - Math.abs(actualExpenses) - Math.abs(todayScheduledExpenses);
 
     // 更新顯示
     document.getElementById("todayDate").textContent = "今日日期：" + todayDate;
@@ -498,12 +500,14 @@ function init() {
     }
 
     // 依次更新視圖
+    generateComparison(document.getElementById("category-select").value);
     renderTodayExpenses();
     displaySummary();
     renderChart();
     renderPieChart(); // 確保圓餅圖更新
-    renderScheduledExpenses(); // 更新預約扣款列表
     updateMonthDisplay(); // 添加這行
+    //renderScheduledExpenses(); // 更新預約扣款列表
+    
 }
 
 function showOtherCharts() {
@@ -574,8 +578,8 @@ function data_decrypt(encryptedData) {
     }
 }
 
-window.addEventListener("load", init, false);
-window.addEventListener("load", initializeCategorySelector, false);
 window.addEventListener("message", (event) => {
     account_name = event.data || "未接收到值";
+    init();
 });
+window.addEventListener("load", initializeCategorySelector, false);

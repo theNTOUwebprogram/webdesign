@@ -14,7 +14,7 @@
 <body>
     <div class="sidebar">
         <div class="sidebar-section">
-            <h2>新增支出/預約</h2>
+            <h2>新增支出(收入)預約</h2>
             <input type="date" id="expenseDate" value="">
             <input type="number" id="expenseAmount" placeholder="金額">
             <div class="quick-amount-buttons">
@@ -25,6 +25,9 @@
                     <button class="amount-btn" onclick="addAmount(10)">+10</button>
             </div>
             <input type="text" id="expenseNote" placeholder="備註 (可選)">
+            <br>
+            <div>支出</div>
+            <hr>
             <div class="category-buttons">
                 <button class="category-btn" onclick="addExpenseWithCategory('交通')">交通</button>
                 <button class="category-btn" onclick="addExpenseWithCategory('早餐')">早餐</button>
@@ -34,6 +37,11 @@
                 <button class="category-btn" onclick="addExpenseWithCategory('零食')">零食</button>
                 <button class="category-btn" onclick="addExpenseWithCategory('娛樂')">娛樂</button>
                 <button class="category-btn" onclick="addExpenseWithCategory('飲料')">飲料</button>
+            </div>
+            <br>
+            <div>收入</div>
+            <hr>
+            <div class="category-buttons">
                 <button class="category-btn salary-btn" onclick="addExpenseWithCategory('薪水')">薪水</button>
                 <button class="category-btn salary-btn" onclick="addExpenseWithCategory('bonus')">Bonus</button>
             </div>
