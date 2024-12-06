@@ -481,9 +481,6 @@ function displaySummary() {
 
 
 function init() {
-    // 添加載入中的遮罩
-    document.body.style.visibility = 'hidden';
-    
     let encryptedData = localStorage.getItem(account_name + "-expenses");
     let data = data_decrypt(encryptedData);
     const today = new Date().toISOString().split("T")[0];
@@ -502,18 +499,15 @@ function init() {
         localStorage.setItem(account_name+"-expenses", ciphertext); // 保存變更
     }
 
-    // 使用 Promise.all 確保所有視圖更新完成
-    Promise.all([
-        generateComparison(document.getElementById("category-select").value),
-        renderTodayExpenses(),
-        displaySummary(),
-        renderChart(),
-        renderPieChart(),
-        updateMonthDisplay()
-    ]).then(() => {
-        // 所有資料載入完成後，顯示頁面
-        document.body.style.visibility = 'visible';
-    });
+    // 依次更新視圖
+    generateComparison(document.getElementById("category-select").value);
+    renderTodayExpenses();
+    displaySummary();
+    renderChart();
+    renderPieChart(); // 確保圓餅圖更新
+    updateMonthDisplay(); // 添加這行
+    //renderScheduledExpenses(); // 更新預約扣款列表
+    
 }
 
 function showOtherCharts() {
@@ -586,11 +580,6 @@ function data_decrypt(encryptedData) {
 
 window.addEventListener("message", (event) => {
     account_name = event.data || "未接收到值";
-    // 確保 DOM 完全載入後再初始化
-    if (document.readyState === 'complete') {
-        init();
-    } else {
-        window.addEventListener('load', init);
-    }
+    init();
 });
 window.addEventListener("load", initializeCategorySelector, false);
