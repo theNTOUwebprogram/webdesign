@@ -53,6 +53,24 @@
                 <!-- 程式會動態填充選項 -->
             </select>
         </div>
+        <div class="sidebar-section">
+            <h2>今日財運</h2>
+            <select id="horoscope" onchange="getHoroscope()">
+                <option value="白羊座">牡羊座</option>
+                <option value="金牛座">金牛座</option>
+                <option value="双子座">雙子座</option>
+                <option value="巨蟹座">巨蟹座</option>
+                <option value="狮子座">獅子座</option>
+                <option value="处女座">處女座</option>
+                <option value="天秤座">天秤座</option>
+                <option value="天蝎座">天蠍座</option>
+                <option value="射手座">射手座</option>
+                <option value="摩羯座">摩羯座</option>
+                <option value="水瓶座">水瓶座</option>
+                <option value="双鱼座">雙魚座</option>
+            </select>
+            <div id="result"></div>
+        </div>
     </div>
 
     <!-- 將現有內容包裝在 main-content div 中 -->

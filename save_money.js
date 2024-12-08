@@ -578,8 +578,63 @@ function data_decrypt(encryptedData) {
     }
 }
 
+function getHoroscope() {
+    const horoscope = document.getElementById("horoscope").value;
+    const url = `https://api.leafone.cn/api/horoscope?name=${horoscope}`;
+
+    fetch(url)
+        .then(response => response.json())
+        .then(data => {
+            const resultDiv = document.getElementById("result");
+            resultDiv.innerHTML = "";
+            if (data.code === 200) {
+                let h = document.createElement("h3");
+                convertToTraditional(data.data.horoscope, h);
+                setTimeout(() => {
+                    h.innerHTML += "分析";
+                }, 400);
+                resultDiv.appendChild(h);
+                let text = document.createElement("p");
+                convertToTraditional(data.data.contentFortune, text);
+                resultDiv.appendChild(text);
+            } else {
+                resultDiv.innerHTML = `<p>查詢失敗，請稍後再試。</p>`;
+            }
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            document.getElementById("result").innerHTML = '<p>太過頻繁，請十秒後再試。</p>';
+        });
+}
+
+function convertToTraditional(simplifiedText, parent) {
+    const url = "https://api.zhconvert.org/convert";
+    const data = {
+        text: simplifiedText,
+        converter : "Taiwan"
+    };
+
+    fetch(url, {
+        method: "POST",
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify(data)
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.data.text === "白羊座") {
+            data.data.text = "牡羊座";
+        }
+        parent.innerHTML += data.data.text;
+    })
+    .catch(error => console.error("Error:", error));
+}
+
 window.addEventListener("message", (event) => {
     account_name = event.data || "未接收到值";
     init();
 });
 window.addEventListener("load", initializeCategorySelector, false);
+
+window.addEventListener("load", getHoroscope, false);
