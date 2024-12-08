@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "description": "本地記帳系統",
   "scripts": {
-    "start": "serve -s ."
+    "start": "serve ."
   },
   "dependencies": {
     "serve": "^14.0.0"
