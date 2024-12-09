@@ -580,20 +580,22 @@ function data_decrypt(encryptedData) {
 
 function getHoroscope() {
     const horoscope = document.getElementById("horoscope").value;
-    const url = `https://api.leafone.cn/api/horoscope?name=${horoscope}`;
+    const url = `http://localhost:3000/horoscope?name=${horoscope}`; // 指向代理伺服器
 
     fetch(url)
         .then(response => response.json())
         .then(data => {
             const resultDiv = document.getElementById("result");
-            resultDiv.innerHTML = "";
+            resultDiv.innerHTML = ""; // 清空之前的內容
+
             if (data.code === 200) {
                 let h = document.createElement("h3");
-                convertToTraditional(data.data.horoscope, h);
+                convertToTraditional(data.data.horoscope, h); // 使用轉繁體函數
                 setTimeout(() => {
                     h.innerHTML += "分析";
-                }, 400);
+                }, 700);
                 resultDiv.appendChild(h);
+
                 let text = document.createElement("p");
                 convertToTraditional(data.data.contentFortune, text);
                 resultDiv.appendChild(text);
@@ -602,24 +604,24 @@ function getHoroscope() {
             }
         })
         .catch(error => {
-            console.error('Error:', error);
+            console.error("Error:", error);
             document.getElementById("result").innerHTML = '<p>太過頻繁，請十秒後再試。</p>';
         });
 }
 
 function convertToTraditional(simplifiedText, parent) {
-    const url = "https://api.zhconvert.org/convert";
+    const proxyUrl = "http://localhost:3000/convert"; // 指向代理伺服器
     const data = {
         text: simplifiedText,
-        converter : "Taiwan"
+        converter: "Taiwan"
     };
 
-    fetch(url, {
+    fetch(proxyUrl, {
         method: "POST",
         headers: {
             "Content-Type": "application/json"
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify(data),
     })
     .then(response => response.json())
     .then(data => {
