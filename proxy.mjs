@@ -59,7 +59,7 @@ app.post('/convert', async (req, res) => {
         if (!response.ok) {
             console.error("目標 API 錯誤:", response.status, await response.text());
             return res.status(response.status).json({ error: "目標 API 請求失敗" });
-    
+        }
 
         const data = await response.json();
 
