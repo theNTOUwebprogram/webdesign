@@ -75,7 +75,7 @@ function generateAccount() {
         window.alert("請輸入帳號及密碼");
     }
     else if (account === "") {
-        window.alert("請輸入帳���");
+        window.alert("請輸入帳號");
     }
     else if (password === "") {
         window.alert("請輸入密碼");
@@ -119,7 +119,7 @@ function deleteAccount() {
         window.alert("請輸入密碼");
     }
     else if (!format.test(password)) {
-        window.alert("密碼格式錯誤，���重新輸入密碼");
+        window.alert("密碼格式錯誤，請重新輸入密碼");
         passwordInput.value = "";
     }
     else {
