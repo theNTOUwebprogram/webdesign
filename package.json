@@ -1,9 +1,10 @@
 {
-    "express": "^4.21.2",
-    "node-fetch": "^3.3.2"
   "name": "accounting-system",
   "version": "1.0.0",
   "description": "本地記帳系統",
+  "engines": {
+    "node": ">=14.0.0"
+  },
   "scripts": {
     "start": "node proxy.mjs"
   },
