@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import cors from 'cors'; // 引入 CORS 支援
 
 const app = express();
-const PORT = 3000; // 可以修改為您需要的埠號
+const PORT = process.env.PORT || 3000; // 可以修改為您需要的埠號
 
 // 啟用 CORS 和 JSON 處理
 app.use(cors());
