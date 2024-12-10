@@ -600,12 +600,12 @@ function getHoroscope() {
                 convertToTraditional(data.data.contentFortune, text);
                 resultDiv.appendChild(text);
             } else {
-                resultDiv.innerHTML = `<p>查詢失敗，請稍後再試。</p>`;
+                resultDiv.innerHTML = `<p>太過頻繁，請十秒後再試。</p>`;
             }
         })
         .catch(error => {
             console.error("Error:", error);
-            document.getElementById("result").innerHTML = '<p>太過頻繁，請十秒後再試。</p>';
+            document.getElementById("result").innerHTML = '<p>查詢失敗，請稍後再試。</p>';
         });
 }
 

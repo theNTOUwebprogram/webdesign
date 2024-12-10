@@ -1,5 +1,5 @@
 const coin_image = new Image();
-coin_image.src = "coin.png";
+coin_image.src = "images/coin.png";
 let accountInput;
 let passwordInput;
 let have_account;
