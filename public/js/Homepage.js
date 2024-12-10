@@ -130,6 +130,7 @@ function deleteAccount() {
                 passwordInput.value = "";
                 flag = 1;
                 localStorage.removeItem(account);
+                localStorage.removeItem(account+"-expenses");
                 break;
             }
             else if (localStorage.key(i) === account) {
