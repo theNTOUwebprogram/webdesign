@@ -10,6 +10,14 @@ const PORT = process.env.PORT || 3000; // 可以修改為您需要的埠號
 app.use(cors());
 app.use(bodyParser.json());
 
+// 添加靜態文件服務
+app.use(express.static('public'));
+
+// 根路由
+app.get('/', (req, res) => {
+    res.sendFile('index.html', { root: './public' });
+});
+
 // Horoscope 路由代理
 app.get('/horoscope', async (req, res) => {
     const { name } = req.query; // 從查詢參數中獲取星座名稱
@@ -62,6 +70,17 @@ app.post('/convert', async (req, res) => {
         console.error("代理伺服器錯誤:", error);
         res.status(500).json({ error: "代理伺服器無法處理請求" });
     }
+});
+
+// 錯誤處理中間件
+app.use((err, req, res, next) => {
+    console.error('錯誤:', err);
+    res.status(500).json({ error: '伺服器內部錯誤' });
+});
+
+// 404 處理
+app.use((req, res) => {
+    res.status(404).json({ error: '找不到請求的資源' });
 });
 
 // 啟動代理伺服器
