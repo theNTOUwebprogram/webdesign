@@ -4,7 +4,7 @@ import fetch from 'node-fetch';
 import cors from 'cors'; // 引入 CORS 支援
 
 const app = express();
-const PORT = process.env.PORT || 3000; // 可以修改為您需要的埠號
+const PORT = process.env.PORT || 10000; // 可以修改為您需要的埠號
 
 // 啟用 CORS 和 JSON 處理
 app.use(cors());
@@ -86,4 +86,5 @@ app.use((req, res) => {
 // 啟動代理伺服器
 app.listen(PORT, () => {
     console.log(`代理伺服器正在執行：http://localhost:${PORT}`);
+    console.log(`代理伺服器已啟動：http://localhost:${PORT}`);
 });
