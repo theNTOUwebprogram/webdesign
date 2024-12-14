@@ -44,11 +44,13 @@ app.get('/horoscope', async (req, res) => {
 // Convert 路由代理
 app.post('/convert', async (req, res) => {
     const { text, converter } = req.body;
-
     const apiUrl = "https://api.zhconvert.org/convert";
 
     try {
-        console.log("代理伺服器接收到的數據:", { text, converter });
+        // 添加請求信息日誌
+        console.log("收到請求路徑:", req.path);
+        console.log("請求內容:", req.body);
+        console.log("準備發送到 API:", apiUrl);
 
         const response = await fetch(apiUrl, {
             method: 'POST',
@@ -56,19 +58,33 @@ app.post('/convert', async (req, res) => {
             body: JSON.stringify({ text, converter }),
         });
 
+        // 添加響應狀態日誌
+        console.log("API 響應狀態:", response.status);
+        
         if (!response.ok) {
-            console.error("目標 API 錯誤:", response.status, await response.text());
-            return res.status(response.status).json({ error: "目標 API 請求失敗" });
+            const errorText = await response.text();
+            console.error("API 錯誤響應:", errorText);
+            return res.status(response.status).json({ 
+                error: "目標 API 請求失敗",
+                details: errorText 
+            });
         }
 
         const data = await response.json();
-
-        console.log("目標 API 返回數據:", data);
-
+        console.log("API 返回數據:", data);
         res.status(200).json(data);
+
     } catch (error) {
-        console.error("代理伺服器錯誤:", error);
-        res.status(500).json({ error: "代理伺服器無法處理請求" });
+        // 更詳細的錯誤日誌
+        console.error("詳細錯誤信息:", {
+            message: error.message,
+            stack: error.stack,
+            name: error.name
+        });
+        res.status(500).json({ 
+            error: "代理伺服器無法處理請求",
+            details: error.message 
+        });
     }
 });
 
