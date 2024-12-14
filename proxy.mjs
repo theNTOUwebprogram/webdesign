@@ -20,24 +20,27 @@ app.get('/', (req, res) => {
 
 // Horoscope 路由代理
 app.get('/horoscope', async (req, res) => {
-    const { name } = req.query; // 從查詢參數中獲取星座名稱
+    const { name } = req.query;
+    console.log("收到星座請求:", name);
     const targetUrl = `https://api.leafone.cn/api/horoscope?name=${encodeURIComponent(name)}`;
+    console.log("請求 URL:", targetUrl);
 
     try {
         const response = await fetch(targetUrl);
+        console.log("API 響應狀態:", response.status);
+        
         if (!response.ok) {
-            console.error("目標 API 錯誤:", response.status, await response.text());
-            return res.status(response.status).json({ error: "目標 API 請求失敗" });
+            const errorText = await response.text();
+            console.error("API 錯誤:", errorText);
+            return res.status(response.status).json({ error: "API 請求失敗" });
         }
+        
         const data = await response.json();
-
-        // 打印目標 API 返回的數據（用於調試）
-        console.log("目標 API 返回數據:", data);
-
+        console.log("API 返回數據:", data);
         res.status(200).json(data);
     } catch (error) {
-        console.error("代理伺服器錯誤:", error);
-        res.status(500).json({ error: "代理伺服器無法處理請求" });
+        console.error("完整錯誤:", error);
+        res.status(500).json({ error: "服務器錯誤" });
     }
 });
 
@@ -90,8 +93,13 @@ app.post('/convert', async (req, res) => {
 
 // 錯誤處理中間件
 app.use((err, req, res, next) => {
-    console.error('錯誤:', err);
-    res.status(500).json({ error: '伺服器內部錯誤' });
+    console.error('錯誤詳情:', {
+        message: err.message,
+        stack: err.stack,
+        path: req.path,
+        method: req.method
+    });
+    res.status(500).json({ error: '服務器內部錯誤' });
 });
 
 // 404 處理
