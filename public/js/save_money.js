@@ -580,7 +580,7 @@ function data_decrypt(encryptedData) {
 
 function getHoroscope() {
     const horoscope = document.getElementById("horoscope").value;
-    const url = `http://localhost:10000/horoscope?name=${horoscope}`; // 指向代理伺服器
+    const url = "horoscope?name=${horoscope}"; // 指向代理伺服器
 
     fetch(url)
         .then(response => response.json())
@@ -610,7 +610,7 @@ function getHoroscope() {
 }
 
 function convertToTraditional(simplifiedText, parent) {
-    const proxyUrl = "http://localhost:10000/convert"; // 指向代理伺服器
+    const proxyUrl = "convert"; // 指向代理伺服器
     const data = {
         text: simplifiedText,
         converter: "Taiwan"
