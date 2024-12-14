@@ -164,4 +164,10 @@ function sendValue(value) {
     }, 100);
 }
 
+function shareFacebook() {
+    const currentUrl = window.location.href;
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
+    window.open(shareUrl, '_blank');
+}
+
 window.addEventListener("load", start, false);

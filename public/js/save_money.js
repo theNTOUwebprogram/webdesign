@@ -431,18 +431,36 @@ function clearSelected() {
     const checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
     let encryptedData = localStorage.getItem(account_name + "-expenses");
     let data = data_decrypt(encryptedData);
+    
+    // 获取当前显示的月份
+    const selectedMonth = currentDisplayMonth.toISOString().slice(0, 7);
+    
+    // 过滤出当月数据并获取其索引
+    const monthlyExpenses = data.filter(expense => expense.date.startsWith(selectedMonth));
+    const selectedIndexes = Array.from(checkboxes).map(checkbox => 
+        parseInt(checkbox.id.split("-")[1])
+    );
 
-    checkboxes.forEach(checkbox => {
-        const index = checkbox.id.split("-")[1];
-        data.splice(index, 1); // 根據索引除對應支出
-    });
+    // 根据选中的索引在原数据中找到对应记录并删除
+    const itemsToRemove = selectedIndexes.map(index => monthlyExpenses[index]);
+    data = data.filter(item => !itemsToRemove.some(removeItem => 
+        removeItem.date === item.date && 
+        removeItem.amount === item.amount && 
+        removeItem.category === item.category &&
+        removeItem.note === item.note
+    ));
 
-    ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), account_name+"-expenses").toString();
-    localStorage.setItem(account_name+"-expenses", ciphertext);
-    renderTodayExpenses(); // 重新渲支出列表
-    displaySummary(); // 更新月總結
-    renderChart(); // 更新折線圖
-    renderPieChart(); // 更新圓餅圖
+    // 保存更新后的数据
+    ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), account_name + "-expenses").toString();
+    localStorage.setItem(account_name + "-expenses", ciphertext);
+
+    // 更新界面
+    renderTodayExpenses();
+    displaySummary();
+    renderChart();
+    renderPieChart();
+    
+
 }
 
 function displaySummary() {
@@ -506,7 +524,7 @@ function init() {
     renderChart();
     renderPieChart(); // 確保圓餅圖更新
     updateMonthDisplay(); // 添加這行
-    //renderScheduledExpenses(); // 更新預約扣款列表
+    //renderScheduledExpenses(); // ���新預約扣款列表
     
 }
 
