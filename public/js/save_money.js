@@ -580,7 +580,7 @@ function data_decrypt(encryptedData) {
 
 function getHoroscope() {
     const horoscope = document.getElementById("horoscope").value;
-    const url = "horoscope?name=${horoscope}"; // 指向代理伺服器
+    const url = `horoscope?name=${horoscope}`; // 指向代理伺服器
 
     fetch(url)
         .then(response => response.json())
