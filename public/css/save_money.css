@@ -499,3 +499,82 @@ body {
     animation: none; /* 當無資料時停止動畫 */
 }
 
+/* 支出按鈕顏色及懸停效果 */
+.category-btn[onclick*="交通"] {
+    background-color: #640D5F;
+    color: white;
+}
+.category-btn[onclick*="交通"]:hover {
+    background-color: #801779;
+}
+
+.category-btn[onclick*="早餐"] {
+    background-color: #D91656;
+    color: white;
+}
+.category-btn[onclick*="早餐"]:hover {
+    background-color: #F01B61;
+}
+
+.category-btn[onclick*="中餐"] {
+    background-color: #EB5B00;
+    color: white;
+}
+.category-btn[onclick*="中餐"]:hover {
+    background-color: #FF6B0D;
+}
+
+.category-btn[onclick*="晚餐"] {
+    background-color: #FFB200;
+}
+.category-btn[onclick*="晚餐"]:hover {
+    background-color: #FFC233;
+}
+
+.category-btn[onclick*="投資"] {
+    background-color: #0066CC;
+    color: white;
+}
+.category-btn[onclick*="投資"]:hover {
+    background-color: #0077EE;
+}
+
+.category-btn[onclick*="零食"] {
+    background-color: #8B3A62;
+    color: white;
+}
+.category-btn[onclick*="零食"]:hover {
+    background-color: #A44775;
+}
+
+.category-btn[onclick*="娛樂"] {
+    background-color: #F06277;
+    color: white;
+}
+.category-btn[onclick*="娛樂"]:hover {
+    background-color: #FF7288;
+}
+
+.category-btn[onclick*="飲料"] {
+    background-color: #FF914D;
+}
+.category-btn[onclick*="飲料"]:hover {
+    background-color: #FFA66B;
+}
+
+/* 收入按鈕顏色及懸停效果 */
+.category-btn[onclick*="薪水"] {
+    background-color: #FFD966;
+}
+.category-btn[onclick*="薪水"]:hover {
+    background-color: #FFE285;
+}
+
+.category-btn[onclick*="bonus"] {
+    background-color: #0082C8;
+    color: white;
+}
+.category-btn[onclick*="bonus"]:hover {
+    background-color: #0095E6;
+}
+

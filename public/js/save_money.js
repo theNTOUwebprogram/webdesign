@@ -289,28 +289,43 @@ document.addEventListener("DOMContentLoaded", () => {
 function renderPieChart() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
     let data = data_decrypt(encryptedData);
-    // 使用 currentDisplayMonth 替代當前月份
     const currentMonth = currentDisplayMonth.toISOString().slice(0, 7);
     const today = new Date().toISOString().split("T")[0];
 
-    // 過濾選中月份的資料
+    // 定義固定的顏色映射
+    const categoryColors = {
+        '交通': '#640D5F',
+        '早餐': '#D91656',
+        '中餐': '#EB5B00',
+        '晚餐': '#FFB200',
+        '投資': '#0066CC',
+        '零食': '#8B3A62',
+        '娛樂': '#F06277',
+        '飲料': '#FF914D',
+        '薪水': '#FFD966',
+        'bonus': '#0082C8'
+    };
+
     const filteredData = data.filter(expense => {
         if (expense.category === "薪水") return false;
         if (expense.type === "scheduled" && expense.date === today) return true;
         return expense.date.startsWith(currentMonth);
     });
 
-    // 計算類別總支出
     const categoryTotals = {};
     filteredData.forEach(expense => {
         categoryTotals[expense.category] = (categoryTotals[expense.category] || 0) + Math.abs(expense.amount);
     });
+
+    // 根據類別獲取對應的顏色
+    const colors = Object.keys(categoryTotals).map(category => categoryColors[category] || '#808080');
 
     const ctx = document.getElementById("pieChart").getContext("2d");
 
     if (pieChartInstance) {
         pieChartInstance.data.labels = Object.keys(categoryTotals);
         pieChartInstance.data.datasets[0].data = Object.values(categoryTotals);
+        pieChartInstance.data.datasets[0].backgroundColor = colors;
         pieChartInstance.update();
     } else {
         pieChartInstance = new Chart(ctx, {
@@ -319,7 +334,7 @@ function renderPieChart() {
                 labels: Object.keys(categoryTotals),
                 datasets: [{
                     data: Object.values(categoryTotals),
-                    backgroundColor: ["#640D5F", "#D91656", "#EB5B00", "#FFB200", "#0066CC","#8B3A62","#F06277","#FF914D","#FFD966","#0082C8"],   
+                    backgroundColor: colors,
                     hoverOffset: 10
                 }]
             },
@@ -382,8 +397,44 @@ function renderTodayExpenses() {
                 </tr>
             </thead>
             <tbody>
-                ${sortedExpenses.map((expense, index) => `
-                    <tr>
+                ${sortedExpenses.map((expense, index) => {
+                    // 定義類別顏色映射
+                    const categoryColors = {
+                        '交通': '#640D5F',
+                        '早餐': '#D91656',
+                        '中餐': '#EB5B00',
+                        '晚餐': '#FFB200',
+                        '投資': '#0066CC',
+                        '零食': '#8B3A62',
+                        '娛樂': '#F06277',
+                        '飲料': '#FF914D',
+                        '薪水': '#FFD966',
+                        'bonus': '#0082C8'
+                    };
+                    
+                    // 定義懸停顏色映射
+                    const hoverColors = {
+                        '交通': '#801779',
+                        '早餐': '#F01B61',
+                        '中餐': '#FF6B0D',
+                        '晚餐': '#FFC233',
+                        '投資': '#0077EE',
+                        '零食': '#A44775',
+                        '娛樂': '#FF7288',
+                        '飲料': '#FFA66B',
+                        '薪水': '#FFE285',
+                        'bonus': '#0095E6'
+                    };
+                    
+                    // 決定文字顏色
+                    const needsWhiteText = ['交通', '早餐', '中餐', '投資', '零食', '娛樂', 'bonus'];
+                    const textColor = needsWhiteText.includes(expense.category) ? 'white' : 'black';
+                    
+                    return `
+                    <tr class="expense-row" 
+                        style="background-color: ${categoryColors[expense.category]}; color: ${textColor};"
+                        data-hover-color="${hoverColors[expense.category]}"
+                        data-base-color="${categoryColors[expense.category]}">
                         <td><input type="checkbox" id="expense-${index}"></td>
                         <td>${expense.date}</td>
                         <td>${expense.category === "薪水" || expense.category === "bonus" ? "實際收入" : (expense.type === "scheduled" ? "預約扣款" : "實際支出")}</td>
@@ -391,13 +442,22 @@ function renderTodayExpenses() {
                         <td>${Math.abs(expense.amount)} 元</td>
                         <td>${expense.note}</td>
                     </tr>
-                `).join("")}
+                `}).join("")}
             </tbody>
         </table>
     `;
 
     expenseList.innerHTML = tableHTML;
-    
+
+    // 添加滑鼠懸停事件處理
+    document.querySelectorAll('.expense-row').forEach(row => {
+        row.addEventListener('mouseenter', function() {
+            this.style.backgroundColor = this.dataset.hoverColor;
+        });
+        row.addEventListener('mouseleave', function() {
+            this.style.backgroundColor = this.dataset.baseColor;
+        });
+    });
 }
 
 
@@ -560,7 +620,7 @@ function addAmount(value) {
     amountInput.value = currentAmount + value;
 }
 
-function data_decrypt(encryptedData) {
+    function data_decrypt(encryptedData) {
     if (encryptedData) {
         return JSON.parse(CryptoJS.AES.decrypt(encryptedData, account_name+"-expenses").toString(CryptoJS.enc.Utf8));
     }
