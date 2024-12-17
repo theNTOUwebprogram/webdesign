@@ -201,7 +201,7 @@ function generateComparison(selectedCategory) {
         return ((currentMonthValue - lastMonthValue) / Math.abs(lastMonthValue)) * 100;
     });
 
-    // 檢查是否有現存的圖表，並銷毀它
+    // 檢查是否���現存的圖表，並銷毀它
     const chartCanvas = document.getElementById("comparison-chart");
     if (chartCanvas.chartInstance) {
         chartCanvas.chartInstance.destroy();
@@ -492,7 +492,7 @@ function displaySummary() {
     let remaining = income - Math.abs(actualExpenses) - Math.abs(todayScheduledExpenses);
 
     // 更新顯示
-    document.getElementById("todayDate").textContent = "今日日期：" + todayDate;
+    document.getElementById("todayDate").textContent = "今日日期��" + todayDate;
     document.getElementById("monthlyTotal").textContent = "本月總消費金額：" + Math.abs(actualExpenses + todayScheduledExpenses) + " 元";
     document.getElementById("monthlyRemaining").textContent = "本月剩餘金額：" + remaining + " 元";
 }
@@ -689,7 +689,7 @@ async function convertCurrency() {
     }
 }
 
-// 添加事��監聽，當貨幣選擇改變時自動更新匯率
+// 添加事件監聽，當貨幣選擇改變時自動更新匯率
 document.addEventListener("DOMContentLoaded", () => {
     const fromCurrency = document.getElementById("fromCurrency");
     const toCurrency = document.getElementById("toCurrency");
@@ -792,11 +792,13 @@ function updateStockMarquee(stockData) {
 
 async function fetchStockInfo() {
     try {
+        console.log('開始獲取股市資訊');
         const stockData = await fetchTopVolumeTW();
+        console.log('獲取到的股市資料:', stockData);
         updateStockMarquee(stockData);
     } catch (error) {
         console.error('更新股市資訊失敗:', error);
-        updateStockMarquee([]); // 顯示無資料訊息
+        updateStockMarquee([]); 
     }
 }
 
