@@ -115,37 +115,7 @@ function renderChart() {
         });
     }
 }
-// 初始化，填充下拉選單
-function initializeCategorySelector() {
-    let encryptedData = localStorage.getItem(account_name + "-expenses");
-    let data = data_decrypt(encryptedData);
-    const uniqueCategories = Array.from(new Set(data.map(expense => expense.category)));
-    const selectElement = document.getElementById("category-select");
-    selectElement.innerHTML = ""; // 確保不會重複添加選項
-    const allOption = document.createElement("option");
-    allOption.value = "";
-    allOption.textContent = "全部";
-    selectElement.appendChild(allOption);
-    uniqueCategories.forEach(category => {
-        const option = document.createElement("option");
-        option.value = category;
-        option.textContent = category;
-        selectElement.appendChild(option);
-    });
 
-    // 監聽下拉選單的變化
-    selectElement.addEventListener("change", () => {
-        generateComparison(selectElement.value);
-    });
-
-    // 初次生成圖表
-    generateComparison(selectElement.value);
-}
-
-// 在 DOMContentLoaded 時初始化下拉選單
-document.addEventListener('DOMContentLoaded', () => {
-    initializeCategorySelector();
-});
 // 根據選擇的類別生成圖表
 function generateComparison(selectedCategory) {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
@@ -307,7 +277,6 @@ function addExpenseWithCategory(category) {
     displaySummary();
     renderChart();
     renderPieChart();
-    initializeCategorySelector();
 }
 
 // 在頁面載入時設置日期預設值為今天
@@ -659,8 +628,6 @@ window.addEventListener("message", (event) => {
     account_name = event.data || "未接收到值";
     init();
 });
-window.addEventListener("load", initializeCategorySelector, false);
-
 window.addEventListener("load", getHoroscope, false);
 
 async function convertCurrency() {
@@ -768,7 +735,7 @@ function updateStockMarquee(stockData) {
         // 根據時間顯示不同的提示訊息
         const message = isMarketTime() ? 
             '無法取得即時股票資訊，請稍後再試' : 
-            '非交易時間，股票資訊將於下個交易日更新';
+            '非交易時間，股票資訊將於下��交易日更新';
         
         marquee.innerHTML = `<span class="no-data">${message}</span>`;
         return;

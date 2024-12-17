@@ -48,9 +48,18 @@
         </div>
         <div class="sidebar-section">
             <h2>類別篩選</h2>
-            <select id="category-select">
+            <select id="category-select" onchange="generateComparison(this.value)">
                 <option value="">全部</option>
-                <!-- 程式會動態填充選項 -->
+                <option value="交通">交通</option>
+                <option value="早餐">早餐</option>
+                <option value="中餐">中餐</option>
+                <option value="晚餐">晚餐</option>
+                <option value="投資">投資</option>
+                <option value="零食">零食</option>
+                <option value="娛樂">娛樂</option>
+                <option value="飲料">飲料</option>
+                <option value="薪水">薪水</option>
+                <option value="bonus">Bonus</option>
             </select>
         </div>
         <div class="sidebar-section">
