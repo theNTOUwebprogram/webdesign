@@ -139,8 +139,13 @@ function initializeCategorySelector() {
     });
 
     // 初次生成圖表
-    generateComparison("");
+    generateComparison(selectElement.value);
 }
+
+// 在 DOMContentLoaded 時初始化下拉選單
+document.addEventListener('DOMContentLoaded', () => {
+    initializeCategorySelector();
+});
 // 根據選擇的類別生成圖表
 function generateComparison(selectedCategory) {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
