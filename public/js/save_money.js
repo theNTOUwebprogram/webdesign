@@ -429,6 +429,7 @@ function renderTodayExpenses() {
 
 function clearSelected() {
     const checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
+
     let encryptedData = localStorage.getItem(account_name + "-expenses");
     let data = data_decrypt(encryptedData);
     
@@ -459,7 +460,6 @@ function clearSelected() {
     displaySummary();
     renderChart();
     renderPieChart();
-    
 
 }
 
@@ -524,8 +524,7 @@ function init() {
     renderChart();
     renderPieChart(); // 確保圓餅圖更新
     updateMonthDisplay(); // 添加這行
-    //renderScheduledExpenses(); // ���新預約扣款列表
-    
+
 }
 
 function showOtherCharts() {
