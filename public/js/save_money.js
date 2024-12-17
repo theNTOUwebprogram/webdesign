@@ -722,7 +722,7 @@ async function fetchTopVolumeTW() {
         }
 
         // 轉換資料格式
-        return data.data.slice(0, 10).map(stock => ({
+        return data.data.slice(0, 100).map(stock => ({
             code: stock[0],
             name: stock[1],
             price: stock[2],
@@ -762,7 +762,7 @@ function updateStockMarquee(stockData) {
         const changeSymbol = parseFloat(stock.change) >= 0 ? '▲' : '▼';
         stockHTML += `
             <span class="stock-item">
-                ${stock.code} ${stock.name} 
+                ${stock.code} ${stock.name}
                 <span class="${changeClass}">
                     ${stock.price} ${changeSymbol}${Math.abs(stock.change)}
                 </span>
