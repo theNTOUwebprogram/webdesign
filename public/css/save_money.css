@@ -433,3 +433,38 @@ body {
     color: #e0e0e0;
 }
 
+.stock-marquee-container {
+    width: 100%;
+    overflow: hidden;
+    background-color: #333;
+    padding: 8px 0;
+    border-radius: 4px;
+    margin-top: 10px;
+}
+
+.stock-marquee {
+    white-space: nowrap;
+    animation: marquee 30s linear infinite;
+    color: white;
+    padding: 5px;
+}
+
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
+}
+
+.stock-item {
+    display: inline-block;
+    margin-right: 20px;
+    font-size: 14px;
+}
+
+.stock-up {
+    color: #ff4444;
+}
+
+.stock-down {
+    color: #44ff44;
+}
+
