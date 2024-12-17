@@ -770,7 +770,7 @@ function updateStockMarquee(stockData) {
         return;
     }
     
-    let stockHTML = '';
+    let stockHTML = '<span class="stock-item">前二十成交量：</span>';
     stockData.forEach(stock => {
         if (!stock) return;
         
