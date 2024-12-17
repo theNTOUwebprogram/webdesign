@@ -165,9 +165,10 @@ function sendValue(value) {
 }
 
 function shareFacebook() {
-    const currentUrl = window.location.href;
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(currentUrl)}`;
-    window.open(shareUrl, '_blank');
+    const websiteUrl = "https://webdesign-ga9m.onrender.com/";
+    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(websiteUrl)}`;
+    const windowFeatures = "width=600,height=400,menubar=no,toolbar=no,status=no";
+    window.open(shareUrl, 'FacebookShare', windowFeatures);
 }
 
 window.addEventListener("load", start, false);
