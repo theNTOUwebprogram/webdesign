@@ -439,7 +439,27 @@ body {
     background-color: #333;
     padding: 8px 0;
     border-radius: 4px;
-    margin-top: 10px;
+    margin-bottom: 20px;
+}
+
+/* 修改捲動條樣式，與其他捲動條保持一致 */
+.stock-marquee-container::-webkit-scrollbar {
+    width: 8px;
+    height: 8px;
+}
+
+.stock-marquee-container::-webkit-scrollbar-track {
+    background: #444;
+    border-radius: 4px;
+}
+
+.stock-marquee-container::-webkit-scrollbar-thumb {
+    background: #666;
+    border-radius: 4px;
+}
+
+.stock-marquee-container::-webkit-scrollbar-thumb:hover {
+    background: #777;
 }
 
 .stock-marquee {
@@ -469,6 +489,5 @@ body {
     text-align: center;
     display: inline-block;
     width: 100%;
-    animation: none; /* 停止跑馬燈動畫 */
 }
 

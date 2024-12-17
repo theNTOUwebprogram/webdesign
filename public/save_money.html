@@ -75,7 +75,6 @@
             <div id="exchangeRate"></div>
         </div>
         <div class="sidebar-section">
-            
             <h2>今日財運</h2>
             <select id="horoscope" onchange="getHoroscope()">
                 <option value="白羊座">牡羊座</option>
@@ -93,20 +92,17 @@
             </select>
             <div id="result"></div>
         </div>
-        <div class="sidebar-section">
-            <h2>股市資訊</h2>
-            <div class="stock-marquee-container">
-                <div class="stock-marquee" id="stockMarquee">
-                    <span class="no-data">無法取得股票資訊</span>
-                </div>
-            </div>
-        </div>
     </div>
 
     <!-- 將現有內容包裝在 main-content div 中 -->
     <div class="main-content">
-        <!-- 將原本的新增支出和預約扣款表單從這裡移除 -->
-        <!-- 保留其他所有內容 -->
+        <!-- 移動股市資訊到這裡 -->
+        <div class="stock-marquee-container">
+            <div class="stock-marquee" id="stockMarquee">
+                <span class="no-data">無法取得股票資訊</span>
+            </div>
+        </div>
+        
         <h1>local accounting system</h1>
         <p id="todayDate"></p>
         <p id="monthlyTotal"></p>
