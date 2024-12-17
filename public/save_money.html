@@ -71,6 +71,28 @@
             </select>
             <div id="result"></div>
         </div>
+        <div class="sidebar-section">
+            <h2>匯率換算</h2>
+            <input type="number" id="exchangeAmount" placeholder="金額">
+            <select id="fromCurrency">
+                <option value="TWD">新台幣 TWD</option>
+                <option value="USD">美元 USD</option>
+                <option value="JPY">日圓 JPY</option>
+                <option value="EUR">歐元 EUR</option>
+                <option value="CNY">人民幣 CNY</option>
+            </select>
+            <span>轉換為</span>
+            <select id="toCurrency">
+                <option value="TWD">新台幣 TWD</option>
+                <option value="USD">美元 USD</option>
+                <option value="JPY">日圓 JPY</option>
+                <option value="EUR">歐元 EUR</option>
+                <option value="CNY">人民幣 CNY</option>
+            </select>
+            <button onclick="convertCurrency()">換算</button>
+            <div id="exchangeResult"></div>
+            <div id="exchangeRate"></div>
+        </div>
     </div>
 
     <!-- 將現有內容包裝在 main-content div 中 -->

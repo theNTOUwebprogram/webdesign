@@ -657,3 +657,52 @@ window.addEventListener("message", (event) => {
 window.addEventListener("load", initializeCategorySelector, false);
 
 window.addEventListener("load", getHoroscope, false);
+
+async function convertCurrency() {
+    const amount = document.getElementById("exchangeAmount").value;
+    const fromCurrency = document.getElementById("fromCurrency").value;
+    const toCurrency = document.getElementById("toCurrency").value;
+    
+    if (!amount || isNaN(amount)) {
+        alert("請輸入有效金額");
+        return;
+    }
+
+    try {
+        // 使用 ExchangeRate-API 獲取匯率數據
+        const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`);
+        const data = await response.json();
+        
+        if (data.rates) {
+            const rate = data.rates[toCurrency];
+            const result = (amount * rate).toFixed(2);
+            const exchangeRate = (1 * rate).toFixed(4);
+            
+            document.getElementById("exchangeResult").innerHTML = 
+                `${amount} ${fromCurrency} = <strong>${result} ${toCurrency}</strong>`;
+            document.getElementById("exchangeRate").innerHTML = 
+                `匯率: 1 ${fromCurrency} = ${exchangeRate} ${toCurrency}`;
+        }
+    } catch (error) {
+        console.error("匯率轉換錯誤:", error);
+        document.getElementById("exchangeResult").innerHTML = "匯率轉換失敗，請稍後再試";
+    }
+}
+
+// 添加事件監聽器，當貨幣選擇改變時自動更新匯率
+document.addEventListener("DOMContentLoaded", () => {
+    const fromCurrency = document.getElementById("fromCurrency");
+    const toCurrency = document.getElementById("toCurrency");
+    
+    fromCurrency.addEventListener("change", () => {
+        if (document.getElementById("exchangeAmount").value) {
+            convertCurrency();
+        }
+    });
+    
+    toCurrency.addEventListener("change", () => {
+        if (document.getElementById("exchangeAmount").value) {
+            convertCurrency();
+        }
+    });
+});
