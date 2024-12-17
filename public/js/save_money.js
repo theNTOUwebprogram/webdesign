@@ -689,7 +689,7 @@ async function convertCurrency() {
     }
 }
 
-// 添加事件監聽���，當貨幣選擇改變時自動更新匯率
+// 添加事件監聽，當貨幣選擇改變時自動更新匯率
 document.addEventListener("DOMContentLoaded", () => {
     const fromCurrency = document.getElementById("fromCurrency");
     const toCurrency = document.getElementById("toCurrency");
@@ -714,7 +714,22 @@ async function fetchTopVolumeTW() {
         
         const response = await fetch(`https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX20?date=${formattedDate}&response=json`);
         const data = await response.json();
-        // 處理數據...
+
+        // 檢查是否有資料
+        if (!data || !data.data || !Array.isArray(data.data)) {
+            console.error('無效的股市資料格式');
+            return [];
+        }
+
+        // 轉換資料格式
+        return data.data.slice(0, 10).map(stock => ({
+            code: stock[0],
+            name: stock[1],
+            price: stock[2],
+            change: parseFloat(stock[3]) || 0,
+            volume: stock[4]
+        }));
+
     } catch (error) {
         console.error('獲取股市資訊失敗:', error);
         return [];
@@ -724,11 +739,10 @@ async function fetchTopVolumeTW() {
 async function fetchStockInfo() {
     try {
         const stockData = await fetchTopVolumeTW();
-        if (stockData.length > 0) {
-            updateStockMarquee(stockData);
-        }
+        updateStockMarquee(stockData);
     } catch (error) {
-        console.error('獲取股市資訊失敗:', error);
+        console.error('更新股市資訊失敗:', error);
+        updateStockMarquee([]); // 顯示無資料訊息
     }
 }
 
@@ -741,10 +755,11 @@ function updateStockMarquee(stockData) {
     }
     
     let stockHTML = '';
-    
     stockData.forEach(stock => {
-        const changeClass = stock.change >= 0 ? 'stock-up' : 'stock-down';
-        const changeSymbol = stock.change >= 0 ? '▲' : '▼';
+        if (!stock) return; // 跳過無效的股票資料
+        
+        const changeClass = parseFloat(stock.change) >= 0 ? 'stock-up' : 'stock-down';
+        const changeSymbol = parseFloat(stock.change) >= 0 ? '▲' : '▼';
         stockHTML += `
             <span class="stock-item">
                 ${stock.code} ${stock.name}
@@ -756,12 +771,12 @@ function updateStockMarquee(stockData) {
         `;
     });
     
-    marquee.innerHTML = stockHTML;
+    marquee.innerHTML = stockHTML || '<span class="no-data">無法取得股票資訊</span>';
 }
 
 // 定期更新股市資訊
 function startStockUpdates() {
-    fetchStockInfo(); // ��始獲取
+    fetchStockInfo(); // 初始獲取
     setInterval(fetchStockInfo, 300000); // 每5分鐘更新一次
 }
 
