@@ -689,7 +689,7 @@ async function convertCurrency() {
     }
 }
 
-// 添加事件監聽器，當貨幣選擇改變時自動更新匯率
+// 添加事件監聽���，當貨幣選擇改變時自動更新匯率
 document.addEventListener("DOMContentLoaded", () => {
     const fromCurrency = document.getElementById("fromCurrency");
     const toCurrency = document.getElementById("toCurrency");
@@ -709,44 +709,14 @@ document.addEventListener("DOMContentLoaded", () => {
 
 async function fetchTopVolumeTW() {
     try {
-        // 使用 Yahoo Finance API 獲取台灣加權指數成分股
-        const response = await fetch('https://tw.stock.yahoo.com/rank/volume');
-        const text = await response.text();
+        const date = new Date();
+        const formattedDate = `${date.getFullYear()}${String(date.getMonth() + 1).padStart(2, '0')}${String(date.getDate()).padStart(2, '0')}`;
         
-        // 解析 HTML 獲取前十大成交量股票
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(text, 'text/html');
-        const stockRows = doc.querySelectorAll('div[class^="Py(12px)"]');
-        
-        const stockData = [];
-        let count = 0;
-        
-        for (const row of stockRows) {
-            if (count >= 10) break;
-            
-            const cells = row.querySelectorAll('div');
-            if (cells.length >= 4) {
-                const stockCode = cells[1].textContent.trim();
-                const stockName = cells[2].textContent.trim();
-                const price = cells[3].textContent.trim();
-                const change = cells[4].textContent.trim();
-                const volume = cells[5].textContent.trim();
-                
-                stockData.push({
-                    code: stockCode,
-                    name: stockName,
-                    price: price,
-                    change: parseFloat(change.replace('%', '')),
-                    volume: volume
-                });
-                
-                count++;
-            }
-        }
-        
-        return stockData;
+        const response = await fetch(`https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX20?date=${formattedDate}&response=json`);
+        const data = await response.json();
+        // 處理數據...
     } catch (error) {
-        console.error('獲取股市排行榜失敗:', error);
+        console.error('獲取股市資訊失敗:', error);
         return [];
     }
 }
@@ -791,7 +761,7 @@ function updateStockMarquee(stockData) {
 
 // 定期更新股市資訊
 function startStockUpdates() {
-    fetchStockInfo(); // 初始獲取
+    fetchStockInfo(); // ��始獲取
     setInterval(fetchStockInfo, 300000); // 每5分鐘更新一次
 }
 
