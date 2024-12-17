@@ -734,11 +734,12 @@ async function fetchTopVolumeTW() {
         }
 
         return data.data.slice(0, 20).map(stock => ({
-            code: stock[0],
-            name: stock[1],
-            price: stock[2],
-            change: parseFloat(stock[3]) || 0,
-            volume: stock[4]
+            rank: stock[0],
+            code: stock[1],
+            name: stock[2],
+            change: stock[10],
+            volume: stock[3],
+            upordown: stock[9]
         }));
 
     } catch (error) {
@@ -757,8 +758,6 @@ function isMarketTime() {
 
     // 如果是週末
     if (day === 0 || day === 6) return false;
-
-    // 交易時間 9:00-13:30 (540-810分鐘)
     return currentTime >= 540 && currentTime <= 810;
 }
 
@@ -779,15 +778,18 @@ function updateStockMarquee(stockData) {
     stockData.forEach(stock => {
         if (!stock) return;
         
-        const changeClass = parseFloat(stock.change) >= 0 ? 'stock-up' : 'stock-down';
-        const changeSymbol = parseFloat(stock.change) >= 0 ? '▲' : '▼';
+        // 根據股票漲跌資訊(stock.change)來決定顯示的樣式和符號
+        // 當股票資訊中的 change 值包含 '+' 時表示上漲，使用紅色(stock-up)和上漲符號(▲)
+        // 當包含 '-' 時表示下跌，使用綠色(stock-down)和下跌符號(▼)
+        const changeClass = stock.upordown.includes('+') ? 'stock-up' : 'stock-down';
+        const changeSymbol = stock.upordown.includes('+') ? '▲' : '▼';
         stockHTML += `
             <span class="stock-item">
-                ${stock.code} ${stock.name}
+               排名:<${stock.rank}> 證卷代碼:${stock.code }&nbsp; 證卷名稱:
                 <span class="${changeClass}">
-                    ${stock.price} ${changeSymbol}${Math.abs(stock.change)}
+                    ${stock.name} ${changeSymbol}${stock.change}
                 </span>
-                量:${stock.volume}
+                &nbsp;成交量:${stock.volume}
             </span>
         `;
     });
