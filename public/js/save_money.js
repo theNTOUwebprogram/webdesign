@@ -728,7 +728,7 @@ async function fetchTopVolumeTW() {
             throw new Error(errorMessage);
         }
 
-        return data.data.slice(0, 10).map(stock => ({
+        return data.data.slice(0, 20).map(stock => ({
             code: stock[0],
             name: stock[1],
             price: stock[2],

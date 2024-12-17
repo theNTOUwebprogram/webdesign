@@ -107,7 +107,7 @@ body {
     background-color: #333;
     color: aliceblue;
     border: none;
-
+    margin-top: 20px;
 }
 
 .month-selector {
@@ -435,7 +435,7 @@ body {
 
 .stock-marquee-container {
     width: 100%;
-    overflow: auto;
+    overflow: hidden;
     background-color: #333;
     padding: 8px 0;
     border-radius: 4px;
@@ -464,8 +464,15 @@ body {
 
 .stock-marquee {
     white-space: nowrap;
+    animation: marquee 30s linear infinite;
     color: white;
     padding: 5px;
+}
+
+/* 加回跑馬燈動畫關鍵幀 */
+@keyframes marquee {
+    0% { transform: translateX(100%); }
+    100% { transform: translateX(-100%); }
 }
 
 .stock-item {
@@ -489,5 +496,6 @@ body {
     text-align: center;
     display: inline-block;
     width: 100%;
+    animation: none; /* 當無資料時停止動畫 */
 }
 
