@@ -735,7 +735,7 @@ function updateStockMarquee(stockData) {
         // 根據時間顯示不同的提示訊息
         const message = isMarketTime() ? 
             '無法取得即時股票資訊，請稍後再試' : 
-            '非交易時間，股票資訊將於下��交易日更新';
+            '非交易時間，股票資訊將於下個交易日更新';
         
         marquee.innerHTML = `<span class="no-data">${message}</span>`;
         return;
