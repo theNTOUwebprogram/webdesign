@@ -206,7 +206,7 @@ function generateComparison(selectedCategory) {
         return ((currentMonthValue - lastMonthValue) / Math.abs(lastMonthValue)) * 100;
     });
 
-    // 檢查是否���現存的圖表，並銷毀它
+    // 檢查是否現存的圖表，並銷毀它
     const chartCanvas = document.getElementById("comparison-chart");
     if (chartCanvas.chartInstance) {
         chartCanvas.chartInstance.destroy();
@@ -420,7 +420,10 @@ function renderTodayExpenses() {
                         <td>${expense.category === "薪水" || expense.category === "bonus" ? "實際收入" : (expense.type === "scheduled" ? "預約扣款" : "實際支出")}</td>
                         <td>${expense.category}</td>
                         <td>${Math.abs(expense.amount)} 元</td>
-                        <td>${expense.note}</td>
+                        <td>${expense.note === "無備註" ? "無備註" : 
+                            expense.note.startsWith('http') ? 
+                            `<a href="${expense.note}" target="_blank">${expense.note}</a>` : 
+                            expense.note}</td>
                     </tr>
                 `).join("")}
             </tbody>
