@@ -164,11 +164,6 @@ function sendValue(value) {
     }, 100);
 }
 
-function shareFacebook() {
-    const websiteUrl = "https://webdesign-ga9m.onrender.com/";
-    const shareUrl = `https://www.facebook.com/sharer/sharer.php?u=${websiteUrl}`;
-    const windowFeatures = "width=600,height=400,menubar=no,toolbar=no,status=no";
-    window.open(shareUrl, 'FacebookShare', windowFeatures);
-}
+
 
 window.addEventListener("load", start, false);
