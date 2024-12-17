@@ -472,7 +472,7 @@ body {
 /* 加回跑馬燈動畫關鍵幀 */
 @keyframes marquee {
     0% { transform: translateX(100%); }
-    100% { transform: translateX(-100%); }
+    100% { transform: translateX(-200%); }
 }
 
 .stock-item {
