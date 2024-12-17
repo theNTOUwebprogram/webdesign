@@ -492,7 +492,7 @@ function displaySummary() {
     let remaining = income - Math.abs(actualExpenses) - Math.abs(todayScheduledExpenses);
 
     // 更新顯示
-    document.getElementById("todayDate").textContent = "今日日期��" + todayDate;
+    document.getElementById("todayDate").textContent = "今日日期" + todayDate;
     document.getElementById("monthlyTotal").textContent = "本月總消費金額：" + Math.abs(actualExpenses + todayScheduledExpenses) + " 元";
     document.getElementById("monthlyRemaining").textContent = "本月剩餘金額：" + remaining + " 元";
 }
