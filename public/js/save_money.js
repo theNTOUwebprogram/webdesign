@@ -689,7 +689,7 @@ async function convertCurrency() {
     }
 }
 
-// 添加事件監聽，當貨幣選擇改變時自動更新匯率
+// 添加事��監聽，當貨幣選擇改變時自動更新匯率
 document.addEventListener("DOMContentLoaded", () => {
     const fromCurrency = document.getElementById("fromCurrency");
     const toCurrency = document.getElementById("toCurrency");
@@ -715,14 +715,20 @@ async function fetchTopVolumeTW() {
         const response = await fetch(`https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX20?date=${formattedDate}&response=json`);
         const data = await response.json();
 
-        // 檢查是否有資料
-        if (!data || !data.data || !Array.isArray(data.data)) {
-            console.error('無效的股市資料格式');
-            return [];
+        // 檢查資料完整性
+        if (!data || data.stat !== 'OK') {
+            throw new Error('無法取得股市資料');
         }
 
-        // 轉換資料格式
-        return data.data.slice(0, 100).map(stock => ({
+        if (!data.data || !Array.isArray(data.data) || data.data.length < 10) {
+            // 如果資料少於10筆，可能是非交易時間或資料不完整
+            const errorMessage = isMarketTime() ? 
+                '股市資料不完整，請稍後再試' : 
+                '目前為非交易時間，顯示最後更新資料';
+            throw new Error(errorMessage);
+        }
+
+        return data.data.slice(0, 10).map(stock => ({
             code: stock[0],
             name: stock[1],
             price: stock[2],
@@ -731,32 +737,42 @@ async function fetchTopVolumeTW() {
         }));
 
     } catch (error) {
-        console.error('獲取股市資訊失敗:', error);
+        console.error('獲取股市資訊失敗:', error.message);
         return [];
     }
 }
 
-async function fetchStockInfo() {
-    try {
-        const stockData = await fetchTopVolumeTW();
-        updateStockMarquee(stockData);
-    } catch (error) {
-        console.error('更新股市資訊失敗:', error);
-        updateStockMarquee([]); // 顯示無資料訊息
-    }
+// 檢查是否在交易時間內（週一到週五 9:00-13:30）
+function isMarketTime() {
+    const now = new Date();
+    const day = now.getDay();
+    const hour = now.getHours();
+    const minute = now.getMinutes();
+    const currentTime = hour * 60 + minute;
+
+    // 如果是週末
+    if (day === 0 || day === 6) return false;
+
+    // 交易時間 9:00-13:30 (540-810分鐘)
+    return currentTime >= 540 && currentTime <= 810;
 }
 
 function updateStockMarquee(stockData) {
     const marquee = document.getElementById('stockMarquee');
     
     if (!stockData || stockData.length === 0) {
-        marquee.innerHTML = '<span class="no-data">無法取得股票資訊</span>';
+        // 根據時間顯示不同的提示訊息
+        const message = isMarketTime() ? 
+            '無法取得即時股票資訊，請稍後再試' : 
+            '非交易時間，股票資訊將於下個交易日更新';
+        
+        marquee.innerHTML = `<span class="no-data">${message}</span>`;
         return;
     }
     
     let stockHTML = '';
     stockData.forEach(stock => {
-        if (!stock) return; // 跳過無效的股票資料
+        if (!stock) return;
         
         const changeClass = parseFloat(stock.change) >= 0 ? 'stock-up' : 'stock-down';
         const changeSymbol = parseFloat(stock.change) >= 0 ? '▲' : '▼';
@@ -771,7 +787,17 @@ function updateStockMarquee(stockData) {
         `;
     });
     
-    marquee.innerHTML = stockHTML || '<span class="no-data">無法取得股票資訊</span>';
+    marquee.innerHTML = stockHTML;
+}
+
+async function fetchStockInfo() {
+    try {
+        const stockData = await fetchTopVolumeTW();
+        updateStockMarquee(stockData);
+    } catch (error) {
+        console.error('更新股市資訊失敗:', error);
+        updateStockMarquee([]); // 顯示無資料訊息
+    }
 }
 
 // 定期更新股市資訊
