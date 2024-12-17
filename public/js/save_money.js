@@ -679,9 +679,9 @@ async function convertCurrency() {
             const exchangeRate = (1 * rate).toFixed(4);
             
             document.getElementById("exchangeResult").innerHTML = 
-                `${amount} ${fromCurrency} = <strong>${result} ${toCurrency}</strong>`;
+                `${amount} ${fromCurrency} = ${result} ${toCurrency}`;
             document.getElementById("exchangeRate").innerHTML = 
-                `匯率: 1 ${fromCurrency} = ${exchangeRate} ${toCurrency}`;
+                `1 ${fromCurrency} = ${exchangeRate} ${toCurrency}`;
         }
     } catch (error) {
         console.error("匯率轉換錯誤:", error);
