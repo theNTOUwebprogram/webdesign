@@ -468,3 +468,13 @@ body {
     color: #44ff44;
 }
 
+.no-data {
+    color: #888;
+    font-style: italic;
+    padding: 10px;
+    text-align: center;
+    display: inline-block;
+    width: 100%;
+    animation: none; /* 停止跑馬燈動畫 */
+}
+

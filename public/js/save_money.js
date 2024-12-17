@@ -764,6 +764,12 @@ async function fetchStockInfo() {
 
 function updateStockMarquee(stockData) {
     const marquee = document.getElementById('stockMarquee');
+    
+    if (!stockData || stockData.length === 0) {
+        marquee.innerHTML = '<span class="no-data">無法取得股票資訊</span>';
+        return;
+    }
+    
     let stockHTML = '';
     
     stockData.forEach(stock => {
