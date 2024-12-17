@@ -610,7 +610,7 @@ function getHoroscope() {
                 convertToTraditional(data.data.horoscope, h); // 使用轉繁體函數
                 setTimeout(() => {
                     h.innerHTML += "分析";
-                }, 700);
+                }, 900);
                 resultDiv.appendChild(h);
 
                 let text = document.createElement("p");

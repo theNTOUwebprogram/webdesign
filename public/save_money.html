@@ -54,24 +54,6 @@
             </select>
         </div>
         <div class="sidebar-section">
-            <h2>今日財運</h2>
-            <select id="horoscope" onchange="getHoroscope()">
-                <option value="白羊座">牡羊座</option>
-                <option value="金牛座">金牛座</option>
-                <option value="双子座">雙子座</option>
-                <option value="巨蟹座">巨蟹座</option>
-                <option value="狮子座">獅子座</option>
-                <option value="处女座">處女座</option>
-                <option value="天秤座">天秤座</option>
-                <option value="天蝎座">天蠍座</option>
-                <option value="射手座">射手座</option>
-                <option value="摩羯座">摩羯座</option>
-                <option value="水瓶座">水瓶座</option>
-                <option value="双鱼座">雙魚座</option>
-            </select>
-            <div id="result"></div>
-        </div>
-        <div class="sidebar-section">
             <h2>匯率換算</h2>
             <input type="number" id="exchangeAmount" placeholder="金額">
             <select id="fromCurrency">
@@ -89,9 +71,28 @@
                 <option value="EUR">歐元 EUR</option>
                 <option value="CNY">人民幣 CNY</option>
             </select>
-            <button onclick="convertCurrency()">換算</button>
+            <button class="convert-btn" onclick="convertCurrency()">換算</button>
             <div id="exchangeResult"></div>
             <div id="exchangeRate"></div>
+        </div>
+        <div class="sidebar-section">
+            
+            <h2>今日財運</h2>
+            <select id="horoscope" onchange="getHoroscope()">
+                <option value="白羊座">牡羊座</option>
+                <option value="金牛座">金牛座</option>
+                <option value="双子座">雙子座</option>
+                <option value="巨蟹座">巨蟹座</option>
+                <option value="狮子座">獅子座</option>
+                <option value="处女座">處女座</option>
+                <option value="天秤座">天秤座</option>
+                <option value="天蝎座">天蠍座</option>
+                <option value="射手座">射手座</option>
+                <option value="摩羯座">摩羯座</option>
+                <option value="水瓶座">水瓶座</option>
+                <option value="双鱼座">雙魚座</option>
+            </select>
+            <div id="result"></div>
         </div>
     </div>
 
