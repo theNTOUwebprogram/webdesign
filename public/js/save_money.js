@@ -723,17 +723,26 @@ async function fetchTopVolumeTW() {
 
         // 轉換資料格式
         return data.data.slice(0, 10).map(stock => ({
-            code: stock[1],         // 證券代號
-            name: stock[2],         // 證券名稱
-            price: stock[8],        // 收盤價
-            change: stock[9] === '<span style=\'color:red\'>+</span>' ? parseFloat(stock[10]) : 
-                   stock[9] === '<span style=\'color:green\'>-</span>' ? -parseFloat(stock[10]) : 0,
-            volume: stock[3]        // 成交股數
+            code: stock[0],
+            name: stock[1],
+            price: stock[2],
+            change: parseFloat(stock[3]) || 0,
+            volume: stock[4]
         }));
 
     } catch (error) {
         console.error('獲取股市資訊失敗:', error);
         return [];
+    }
+}
+
+async function fetchStockInfo() {
+    try {
+        const stockData = await fetchTopVolumeTW();
+        updateStockMarquee(stockData);
+    } catch (error) {
+        console.error('更新股市資訊失敗:', error);
+        updateStockMarquee([]); // 顯示無資料訊息
     }
 }
 
