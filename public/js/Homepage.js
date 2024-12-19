@@ -117,7 +117,6 @@ function generateAccount() {
         }
         accountInput.value = "";
         passwordInput.value = "";
-        location.reload();
     }
     
 }
