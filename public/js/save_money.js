@@ -294,16 +294,16 @@ function renderPieChart() {
 
     // 定義固定的顏色映射
     const categoryColors = {
-        '交通': '#640D5F',
-        '早餐': '#D91656',
-        '中餐': '#EB5B00',
-        '晚餐': '#FFB200',
-        '投資': '#0066CC',
-        '零食': '#8B3A62',
-        '娛樂': '#F06277',
-        '飲料': '#FF914D',
-        '薪水': '#FFD966',
-        'bonus': '#0082C8'
+        '交通': '#9a00c0',
+        '早餐': '#ec111c',
+        '中餐': '#ff0080',
+        '晚餐': '#f75f00',
+        '投資': '#7002a3',
+        '零食': '#1959e4',
+        '娛樂': '#140181',
+        '飲料': '#0300c2',
+        '薪水': '#e4bb03',
+        'bonus': '#c9b24e'
     };
 
     const filteredData = data.filter(expense => {
@@ -400,34 +400,34 @@ function renderTodayExpenses() {
                 ${sortedExpenses.map((expense, index) => {
                     // 定義類別顏色映射
                     const categoryColors = {
-                        '交通': '#640D5F',
-                        '早餐': '#D91656',
-                        '中餐': '#EB5B00',
-                        '晚餐': '#FFB200',
-                        '投資': '#0066CC',
-                        '零食': '#8B3A62',
-                        '娛樂': '#F06277',
-                        '飲料': '#FF914D',
-                        '薪水': '#FFD966',
-                        'bonus': '#0082C8'
+                        '早餐': '#ec111c',
+                        '中餐': '#ff0080',
+                        '晚餐': '#f75f00',
+                        '零食': '#1959e4',
+                        '飲料': '#0300c2',
+                        '娛樂': '#140181',
+                        '交通': '#9a00c0',
+                        '投資': '#7002a3',
+                        '薪水': '#e4bb03',
+                        'bonus': '#c9b24e'
                     };
                     
                     // 定義懸停顏色映射
                     const hoverColors = {
-                        '交通': '#801779',
-                        '早餐': '#F01B61',
-                        '中餐': '#FF6B0D',
-                        '晚餐': '#FFC233',
-                        '投資': '#0077EE',
-                        '零食': '#A44775',
-                        '娛樂': '#FF7288',
-                        '飲料': '#FFA66B',
-                        '薪水': '#FFE285',
-                        'bonus': '#0095E6'
+                        '早餐': '#e74049',
+                        '中餐': '#ff40a0',
+                        '晚餐': '#f17c33',
+                        '零食': '#4778e0',
+                        '飲料': '#3432bd',
+                        '娛樂': '#332199',
+                        '交通': '#a84cbe',
+                        '投資': '#7e35a0',
+                        '薪水': '#e9d26a',
+                        'bonus': '#c7b777'
                     };
                     
                     // 決定文字顏色
-                    const needsWhiteText = ['交通', '早餐', '中餐', '投資', '零食', '娛樂', 'bonus'];
+                    const needsWhiteText = ['交通', '早餐', '中餐', '晚餐', '投資', '零食', '娛樂', '飲料'];
                     const textColor = needsWhiteText.includes(expense.category) ? 'white' : 'black';
                     
                     return `
@@ -801,7 +801,7 @@ function updateStockMarquee(stockData) {
         return;
     }
     
-    let stockHTML = '<span class="stock-item">前二十成交量：</span>';
+    let stockHTML = '<span class="stock-item">今日股票前二十成交量：</span>';
     stockData.forEach(stock => {
         if (!stock) return;
         

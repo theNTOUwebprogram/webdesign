@@ -11,10 +11,37 @@ h1 {
     margin-bottom: 20px;
 }
 
+#user_title {
+    position: absolute;
+    top: 1%;
+    left: 5%;
+    color: #7d3200;
+}
+
+#user_name {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    top:  9%;
+    left: 3%;
+    width: 10%;
+    height: 100%;
+}
+
+.user_block {
+    border: 1px rgb(0, 0, 0) solid;
+    background-color: #C96828;
+    color: #7d3200;
+    padding-top: 12%;
+    margin: 2%;
+    text-align: center;
+    width: 100%;
+    height: 10%;
+}
+
 #login_page {
     font-size: 70px;
     text-align: center;
-
     color: #223553;
 }
 
