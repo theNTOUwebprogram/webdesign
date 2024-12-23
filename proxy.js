@@ -1,16 +1,18 @@
 const express = require('express');
 const bodyParser = require('body-parser');
-const fetch = require('node-fetch');
-const cors = require('cors'); // 引入 CORS 支援
+const cors = require('cors');
+
+// 使用 node-fetch v3+ 的方式
+const fetch = (...args) => import('node-fetch').then(({ default: fetch }) => fetch(...args));
 
 const app = express();
-const PORT = process.env.PORT || 3000; // 可以修改為您需要的埠號
+const PORT = process.env.PORT || 3000;
 
-// 啟用 CORS 和 JSON 處理
+// 啟用 CORS 和 JSON 支援
 app.use(cors());
-app.use(bodyParser.json());
+app.use(express.json());
 
-// 添加靜態文件服務
+// 靜態文件服務
 app.use(express.static('public'));
 
 // 根路由
@@ -22,25 +24,23 @@ app.get('/', (req, res) => {
 app.get('/horoscope', async (req, res) => {
     const { name } = req.query;
     console.log("收到星座請求:", name);
+
     const targetUrl = `https://api.leafone.cn/api/horoscope?name=${encodeURIComponent(name)}`;
     console.log("請求 URL:", targetUrl);
 
     try {
         const response = await fetch(targetUrl);
-        console.log("API 響應狀態:", response.status);
-
         if (!response.ok) {
             const errorText = await response.text();
             console.error("API 錯誤:", errorText);
             return res.status(response.status).json({ error: "API 請求失敗" });
         }
-
         const data = await response.json();
         console.log("API 返回數據:", data);
         res.status(200).json(data);
     } catch (error) {
         console.error("完整錯誤:", error);
-        res.status(500).json({ error: "服務器錯誤" });
+        res.status(500).json({ error: "服務器錯誤", details: error.message });
     }
 });
 
@@ -50,19 +50,13 @@ app.post('/convert', async (req, res) => {
     const apiUrl = "https://api.zhconvert.org/convert";
 
     try {
-        // 添加請求信息日誌
-        console.log("收到請求路徑:", req.path);
-        console.log("請求內容:", req.body);
-        console.log("準備發送到 API:", apiUrl);
+        console.log("收到請求內容:", req.body);
 
         const response = await fetch(apiUrl, {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ text, converter }),
         });
-
-        // 添加響應狀態日誌
-        console.log("API 響應狀態:", response.status);
 
         if (!response.ok) {
             const errorText = await response.text();
@@ -76,9 +70,7 @@ app.post('/convert', async (req, res) => {
         const data = await response.json();
         console.log("API 返回數據:", data);
         res.status(200).json(data);
-
     } catch (error) {
-        // 更詳細的錯誤日誌
         console.error("詳細錯誤信息:", {
             message: error.message,
             stack: error.stack,
@@ -107,8 +99,7 @@ app.use((req, res) => {
     res.status(404).json({ error: '找不到請求的資源' });
 });
 
-// 啟動代理伺服器
+// 啟動伺服器
 app.listen(PORT, () => {
-    console.log(`代理伺服器正在執行：http://localhost:${PORT}`);
-    console.log(`代理伺服器已啟動：http://localhost:${PORT}`);
+    console.log(`伺服器正在執行：http://localhost:${PORT}`);
 });
