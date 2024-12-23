@@ -1,186 +1,171 @@
 const coin_image = new Image();
 coin_image.src = "images/coin.png";
-let accountInput;
-let passwordInput;
-let have_account;
-let new_account;
-let delete_account;
-let format = /^[a-zA-Z]+\d+$/;
+const format = /^[a-zA-Z]+\d+$/;
 let user = [];
-let user_name;
-
-
 
 function start() {
-    accountInput = document.getElementById("accountInput");
-    passwordInput = document.getElementById("passwordInput");
-    have_account= document.getElementById("have_account");
-    new_account = document.getElementById("new_account");
-    delete_account = document.getElementById("delete_account");
-    coin = document.getElementById("coin");
-    user_name = document.getElementById("user_name");
+    // 使用 jQuery 獲取 DOM 元素
+    const accountInput = $("#accountInput");
+    const passwordInput = $("#passwordInput");
+    const have_account = $("#have_account");
+    const new_account = $("#new_account");
+    const delete_account = $("#delete_account");
+    const coin = $("#coin");
+    const user_name = $("#user_name");
+
     let temp = "";
-    coin.src = coin_image.src;
-    
+    coin.attr("src", coin_image.src); // 設置圖片來源
+
+    // 獲取 localStorage 的鍵並處理
     for (let i = 0; i < localStorage.length; i++) {
         user.push(localStorage.key(i));
     }
-    user.forEach(str => {
+    $.each(user, function (_, str) {
         const match = str.match(/^(.*)-user$/);
-        
         if (match) {
             temp += `<h1 class="user_block">${match[1]}</h1>`;
         }
-    })
-    user_name.innerHTML = temp;
-    
-    have_account.addEventListener("click", login, false);
-    new_account.addEventListener("click", generateAccount, false);
-    delete_account.addEventListener("click",deleteAccount, false);
+    });
+    user_name.html(temp); // 更新用戶區塊
+
+    // 綁定按鈕事件
+    have_account.on("click", () => login(accountInput, passwordInput));
+    new_account.on("click", () => generateAccount(accountInput, passwordInput));
+    delete_account.on("click", () => deleteAccount(accountInput, passwordInput));
 }
 
-function login() {
-    let account = accountInput.value;
-    let password = passwordInput.value;
+function login(accountInput, passwordInput) {
+    const account = accountInput.val();
+    const password = passwordInput.val();
     let flag = 0;
-    if ((account === "") && (password === "")) {
-        window.alert("請輸入帳號及密碼");
-    }
-    else if (account === "") {
-        window.alert("請輸入帳號");
-    }
-    else if (password === "") {
-        window.alert("請輸入密碼");
-    }
-    else if (!format.test(password)) {
-        window.alert("密碼格式錯誤，請重新輸入密碼");
-        passwordInput.value = "";
-    }
-    else {
+
+    if (account === "" && password === "") {
+        alert("請輸入帳號及密碼");
+    } else if (account === "") {
+        alert("請輸入帳號");
+    } else if (password === "") {
+        alert("請輸入密碼");
+    } else if (!format.test(password)) {
+        alert("密碼格式錯誤，請重新輸入密碼");
+        passwordInput.val("");
+    } else {
         for (let i = 0; i < localStorage.length; i++) {
-            if ((localStorage.key(i) === (account + "-user")) && (CryptoJS.AES.decrypt(localStorage.getItem(account + "-user"), localStorage.key(i)).toString(CryptoJS.enc.Utf8) ===  password)) {  
-                window.alert("登入成功");
-                accountInput.value = "";
-                passwordInput.value = "";
+            const key = localStorage.key(i);
+            const storedPassword = CryptoJS.AES.decrypt(localStorage.getItem(key), key).toString(CryptoJS.enc.Utf8);
+
+            if (key === `${account}-user` && storedPassword === password) {
+                alert("登入成功");
+                accountInput.val("");
+                passwordInput.val("");
                 flag = 1;
                 sendValue(account);
                 break;
-            }
-            else if (localStorage.key(i) === (account + "-user")) {
-                window.alert("密碼錯誤，請重新輸入密碼");
-                passwordInput.value = "";
+            } else if (key === `${account}-user`) {
+                alert("密碼錯誤，請重新輸入密碼");
+                passwordInput.val("");
                 flag = 1;
                 break;
             }
         }
-        if (flag == 0) {
-            window.alert("查無此帳號，請重新輸入帳號及密碼");
-            accountInput.value = "";
-            passwordInput.value = "";
+        if (flag === 0) {
+            alert("查無此帳號，請重新輸入帳號及密碼");
+            accountInput.val("");
+            passwordInput.val("");
         }
     }
-    
 }
 
-function generateAccount() {
-    let account = accountInput.value;
-    let password = passwordInput.value;
-    let key = CryptoJS.AES.encrypt(password, (account + "-user")).toString();
+function generateAccount(accountInput, passwordInput) {
+    const account = accountInput.val();
+    const password = passwordInput.val();
+    const key = CryptoJS.AES.encrypt(password, `${account}-user`).toString();
     let flag = 0;
-    if ((account === "") && (password === "")) {
-        window.alert("請輸入帳號及密碼");
-    }
-    else if (account === "") {
-        window.alert("請輸入帳號");
-    }
-    else if (password === "") {
-        window.alert("請輸入密碼");
-    }
-    else if (!format.test(password)) {
-        window.alert("密碼格式錯誤，請重新輸入密碼");
-        passwordInput.value = "";
-    }
-    else {
+
+    if (account === "" && password === "") {
+        alert("請輸入帳號及密碼");
+    } else if (account === "") {
+        alert("請輸入帳號");
+    } else if (password === "") {
+        alert("請輸入密碼");
+    } else if (!format.test(password)) {
+        alert("密碼格式錯誤，請重新輸入密碼");
+        passwordInput.val("");
+    } else {
         for (let i = 0; i < localStorage.length; i++) {
-            if (localStorage.key(i) === (account + "-user") ) {
+            if (localStorage.key(i) === `${account}-user`) {
                 flag = 1;
                 break;
             }
         }
-        if (flag == 1) {
-            window.alert("帳號名稱已被使用，請重新輸入帳號及密碼");
-        }
-        else {
-            localStorage.setItem(account + "-user", key);
-            window.alert("帳號創建成功\n帳號:" + account + "\n密碼:" + password);
+        if (flag === 1) {
+            alert("帳號名稱已被使用，請重新輸入帳號及密碼");
+        } else {
+            localStorage.setItem(`${account}-user`, key);
+            alert(`帳號創建成功\n帳號: ${account}\n密碼: ${password}`);
             sendValue(account);
         }
-        accountInput.value = "";
-        passwordInput.value = "";
+        accountInput.val("");
+        passwordInput.val("");
     }
-    
 }
 
-function deleteAccount() {
-    let account = accountInput.value;
-    let password = passwordInput.value;
+function deleteAccount(accountInput, passwordInput) {
+    const account = accountInput.val();
+    const password = passwordInput.val();
     let flag = 0;
-    if ((account === "") && (password === "")) {
-        window.alert("請輸入帳號及密碼");
-    }
-    else if (account === "") {
-        window.alert("請輸入帳號");
-    }
-    else if (password === "") {
-        window.alert("請輸入密碼");
-    }
-    else if (!format.test(password)) {
-        window.alert("密碼格式錯誤，請重新輸入密碼");
-        passwordInput.value = "";
-    }
-    else {
+
+    if (account === "" && password === "") {
+        alert("請輸入帳號及密碼");
+    } else if (account === "") {
+        alert("請輸入帳號");
+    } else if (password === "") {
+        alert("請輸入密碼");
+    } else if (!format.test(password)) {
+        alert("密碼格式錯誤，請重新輸入密碼");
+        passwordInput.val("");
+    } else {
         for (let i = 0; i < localStorage.length; i++) {
-            if ((localStorage.key(i) === (account + "-user")) && (CryptoJS.AES.decrypt(localStorage.getItem(account + "-user"), localStorage.key(i)).toString(CryptoJS.enc.Utf8) ===  password)) {  
-                window.alert("帳號已刪除");
-                accountInput.value = "";
-                passwordInput.value = "";
+            const key = localStorage.key(i);
+            const storedPassword = CryptoJS.AES.decrypt(localStorage.getItem(key), key).toString(CryptoJS.enc.Utf8);
+
+            if (key === `${account}-user` && storedPassword === password) {
+                alert("帳號已刪除");
+                accountInput.val("");
+                passwordInput.val("");
                 flag = 1;
-                localStorage.removeItem(account + "-user");
-                localStorage.removeItem(account + "-expenses");
+                localStorage.removeItem(`${account}-user`);
+                localStorage.removeItem(`${account}-expenses`);
                 location.reload();
                 break;
-            }
-            else if (localStorage.key(i) === (account + "-user")) {
-                window.alert("密碼錯誤，請重新輸入密碼");
-                passwordInput.value = "";
+            } else if (key === `${account}-user`) {
+                alert("密碼錯誤，請重新輸入密碼");
+                passwordInput.val("");
                 flag = 1;
                 break;
             }
         }
-        if (flag == 0) {
-            window.alert("查無此帳號，請重新輸入帳號及密碼");
-            accountInput.value = "";
-            passwordInput.value = "";
+        if (flag === 0) {
+            alert("查無此帳號，請重新輸入帳號及密碼");
+            accountInput.val("");
+            passwordInput.val("");
         }
     }
 }
 
 function sendValue(value) {
-    const receiverWindow = window.open("save_money.html"); // 開啟另一個頁面
+    const receiverWindow = window.open("save_money.html");
 
     if (!receiverWindow) {
         return;
     }
 
-    // 確保目標頁面完全載入後執行 postMessage
     const checkReady = setInterval(() => {
         if (receiverWindow && receiverWindow.document.readyState === "complete") {
-            receiverWindow.postMessage(value, "*"); // 傳遞數據
-            clearInterval(checkReady); // 停止檢查
+            receiverWindow.postMessage(value, "*");
+            clearInterval(checkReady);
         }
     }, 100);
 }
 
-
-
-window.addEventListener("load", start, false);
+// 使用 jQuery 在頁面加載完成後啟動
+$(document).ready(start);
