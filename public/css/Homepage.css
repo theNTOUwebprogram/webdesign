@@ -243,6 +243,21 @@ h1 {
     transform: rotate(-30deg);
 }
 
+#ppt {
+    position: fixed;
+
+    text-decoration:none;
+    text-align: center;
+    cursor: pointer;
+    height: 70px;
+    width: 100px;
+    right: 20px;
+    bottom: 110px;
+    color: white;
+    border-color: #f8120a;
+    background-color: #f8120a;
+}
+
 #share {
     position: fixed;
 
