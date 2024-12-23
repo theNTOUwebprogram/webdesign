@@ -437,7 +437,7 @@ function renderTodayExpenses() {
                         data-base-color="${categoryColors[expense.category]}">
                         <td><input type="checkbox" id="expense-${index}"></td>
                         <td>${expense.date}</td>
-                        <td>${expense.category === "薪水" || expense.category === "bonus" ? "實際收入" : (expense.type === "scheduled" ? "預約扣款" : "實際支出")}</td>
+                        <td>${(expense.category === "薪水" || expense.category === "bonus" ) && (expense.type === "scheduled")? "預約收入": (expense.category === "薪水" || expense.category === "bonus" ) ? "實際收入" : (expense.type === "scheduled" ? "預約支出" : "實際支出")}</td>
                         <td>${expense.category}</td>
                         <td>${Math.abs(expense.amount)} 元</td>
                         <td>${expense.note}</td>
