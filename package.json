@@ -6,7 +6,7 @@
     "node": ">=14.0.0"
   },
   "scripts": {
-    "start": "node proxy.mjs"
+    "start": "node proxy.js"
   },
   "dependencies": {
     "cors": "^2.8.5",

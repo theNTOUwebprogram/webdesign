@@ -1,7 +1,7 @@
-import express from 'express';
-import bodyParser from 'body-parser';
-import fetch from 'node-fetch';
-import cors from 'cors'; // 引入 CORS 支援
+const express = require('express');
+const bodyParser = require('body-parser');
+const fetch = require('node-fetch');
+const cors = require('cors'); // 引入 CORS 支援
 
 const app = express();
 const PORT = process.env.PORT || 3000; // 可以修改為您需要的埠號
@@ -28,13 +28,13 @@ app.get('/horoscope', async (req, res) => {
     try {
         const response = await fetch(targetUrl);
         console.log("API 響應狀態:", response.status);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error("API 錯誤:", errorText);
             return res.status(response.status).json({ error: "API 請求失敗" });
         }
-        
+
         const data = await response.json();
         console.log("API 返回數據:", data);
         res.status(200).json(data);
@@ -63,13 +63,13 @@ app.post('/convert', async (req, res) => {
 
         // 添加響應狀態日誌
         console.log("API 響應狀態:", response.status);
-        
+
         if (!response.ok) {
             const errorText = await response.text();
             console.error("API 錯誤響應:", errorText);
-            return res.status(response.status).json({ 
+            return res.status(response.status).json({
                 error: "目標 API 請求失敗",
-                details: errorText 
+                details: errorText
             });
         }
 
@@ -84,9 +84,9 @@ app.post('/convert', async (req, res) => {
             stack: error.stack,
             name: error.name
         });
-        res.status(500).json({ 
+        res.status(500).json({
             error: "代理伺服器無法處理請求",
-            details: error.message 
+            details: error.message
         });
     }
 });
