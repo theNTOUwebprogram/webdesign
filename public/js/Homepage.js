@@ -68,44 +68,11 @@ function login(accountInput, passwordInput) {
             }
         }
         if (flag === 0) {
-            alert("查無此帳號，請重新輸入帳號及密碼");
+            alert("查無此帳號，請先創建帳號");
             accountInput.val("");
             passwordInput.val("");
+            window.open('create.html', '_self');
         }
-    }
-}
-
-function generateAccount(accountInput, passwordInput) {
-    const account = accountInput.val();
-    const password = passwordInput.val();
-    const key = CryptoJS.AES.encrypt(password, `${account}-user`).toString();
-    let flag = 0;
-
-    if (account === "" && password === "") {
-        alert("請輸入帳號及密碼");
-    } else if (account === "") {
-        alert("請輸入帳號");
-    } else if (password === "") {
-        alert("請輸入密碼");
-    } else if (!format.test(password)) {
-        alert("密碼格式錯誤，請重新輸入密碼");
-        passwordInput.val("");
-    } else {
-        for (let i = 0; i < localStorage.length; i++) {
-            if (localStorage.key(i) === `${account}-user`) {
-                flag = 1;
-                break;
-            }
-        }
-        if (flag === 1) {
-            alert("帳號名稱已被使用，請重新輸入帳號及密碼");
-        } else {
-            localStorage.setItem(`${account}-user`, key);
-            alert(`帳號創建成功\n帳號: ${account}\n密碼: ${password}`);
-            sendValue(account);
-        }
-        accountInput.val("");
-        passwordInput.val("");
     }
 }
 

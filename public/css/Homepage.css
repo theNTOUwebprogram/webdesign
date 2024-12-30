@@ -139,12 +139,12 @@ h1 {
 
 #account_annotation {
     position:absolute;
-    top: 180px;
+    top: 190px;
 }
 
 #password_annotation {
     position:absolute;
-    top: 280px;
+    top: 300px;
 }
 
 .Input {
@@ -167,11 +167,11 @@ h1 {
 }
 
 #accountInput {
-    top: 210px;
+    top: 230px;
 }
 
 #passwordInput {
-    top: 310px;
+    top: 340px;
 }
 
 .button-group {
@@ -181,7 +181,7 @@ h1 {
     flex-direction: column;
     flex-wrap: wrap;
 
-    top: 390px;
+    top: 440px;
     left: 50px;
 
     z-index: 1;
@@ -245,7 +245,8 @@ h1 {
 
 #ppt {
     position: fixed;
-
+    
+    font-size:30px;
     text-decoration:none;
     text-align: center;
     cursor: pointer;
