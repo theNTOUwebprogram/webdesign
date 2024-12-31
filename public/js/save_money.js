@@ -535,20 +535,30 @@ function displaySummary() {
 function init() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
     let data = data_decrypt(encryptedData);
-    const today = new Date().toISOString().split("T")[0];
+    // 使用當地時間而不是 UTC 時間
+    const today = new Date();
+    const todayStr = today.getFullYear() + '-' + 
+                     String(today.getMonth() + 1).padStart(2, '0') + '-' + 
+                     String(today.getDate()).padStart(2, '0');
 
-    // 檢查當日預約扣款，並將其轉為實際支出
+    // 檢查並轉換預約支出
     let updated = false;
-    data.forEach(expense => {
-        if (expense.type === "scheduled" && expense.date === today) {
-            expense.type = "actual"; // 更新為實際支出
+    data = data.map(expense => {
+        // 比較日期是否小於等於今天
+        if (expense.type === "scheduled" && expense.date <= todayStr) {
             updated = true;
+            return {
+                ...expense,
+                type: "actual"  // 更新為實際支出
+            };
         }
+        return expense;
     });
 
+    // 如果有更新，保存到 localStorage
     if (updated) {
-        ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), account_name+"-expenses").toString();
-        localStorage.setItem(account_name+"-expenses", ciphertext); // 保存變更
+        const ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), account_name+"-expenses").toString();
+        localStorage.setItem(account_name+"-expenses", ciphertext);
     }
 
     // 依次更新視圖
@@ -688,7 +698,9 @@ window.addEventListener("message", (event) => {
     account_name = event.data || "未接收到值";
     init();
 });
-window.addEventListener("load", getHoroscope, false);
+window.addEventListener("load", () => {
+    init();
+});
 
 async function convertCurrency() {
     const amount = document.getElementById("exchangeAmount").value;
