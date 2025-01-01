@@ -234,9 +234,14 @@ function generateComparison(selectedCategory) {
 
 function addExpenseWithCategory(category) {
     const expenseDate = document.getElementById("expenseDate").value;
+    const today = new Date().toLocaleString('zh-TW', {
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').join('-');
     const expenseAmount = parseFloat(document.getElementById("expenseAmount").value);
     const expenseNote = document.getElementById("expenseNote").value || "無備註";
-    const today = new Date().toISOString().split("T")[0];
 
     if (!expenseAmount || isNaN(expenseAmount)) {
         alert("請輸入有效的金額！");
@@ -282,7 +287,12 @@ function addExpenseWithCategory(category) {
 // 在頁面載入時設置日期預設值為今天
 document.addEventListener("DOMContentLoaded", () => {
     const expenseDateInput = document.getElementById("expenseDate");
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date().toLocaleString('zh-TW', {
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').join('-');
     expenseDateInput.value = today;
 });
 
@@ -290,7 +300,12 @@ function renderPieChart() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
     let data = data_decrypt(encryptedData);
     const currentMonth = currentDisplayMonth.toISOString().slice(0, 7);
-    const today = new Date().toISOString().split("T")[0];
+    const today = new Date().toLocaleString('zh-TW', {
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').join('-');
 
     // 定義固定的顏色映射
     const categoryColors = {
@@ -539,16 +554,18 @@ function init() {
     let encryptedData = localStorage.getItem(account_name + "-expenses");
     let data = data_decrypt(encryptedData);
     // 使用當地時間而不是 UTC 時間
-    const today = new Date();
-    const todayStr = today.getFullYear() + '-' + 
-                     String(today.getMonth() + 1).padStart(2, '0') + '-' + 
-                     String(today.getDate()).padStart(2, '0');
+    const today = new Date().toLocaleString('zh-TW', {
+        timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit'
+    }).split('/').join('-');
 
     // 檢查並轉換預約支出
     let updated = false;
     data = data.map(expense => {
         // 比較日期是否小於等於今天
-        if (expense.type === "scheduled" && expense.date <= todayStr) {
+        if (expense.type === "scheduled" && expense.date <= today) {
             updated = true;
             return {
                 ...expense,
