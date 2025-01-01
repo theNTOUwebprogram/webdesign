@@ -466,8 +466,6 @@ function renderTodayExpenses() {
     `;
 
     expenseList.innerHTML = tableHTML;
-
-    // 添加滑鼠懸停事件處理
     document.querySelectorAll('.expense-row').forEach(row => {
         row.addEventListener('mouseenter', function() {
             this.style.backgroundColor = this.dataset.hoverColor;
@@ -477,8 +475,6 @@ function renderTodayExpenses() {
         });
     });
 }
-
-
 function clearSelected() {
     const checkboxes = document.querySelectorAll("input[type='checkbox']:checked");
 
@@ -560,28 +556,21 @@ function init() {
         month: '2-digit',
         day: '2-digit'
     }).split('/').join('-');
-
-    // 檢查並轉換預約支出
     let updated = false;
     data = data.map(expense => {
-        // 比較日期是否小於等於今天
         if (expense.type === "scheduled" && expense.date <= today) {
             updated = true;
             return {
                 ...expense,
-                type: "actual"  // 更新為實際支出
+                type: "actual" 
             };
         }
         return expense;
     });
-
-    // 如果有更新，保存到 localStorage
     if (updated) {
         const ciphertext = CryptoJS.AES.encrypt(JSON.stringify(data), account_name+"-expenses").toString();
         localStorage.setItem(account_name+"-expenses", ciphertext);
     }
-
-    // 依次更新視圖
     generateComparison(document.getElementById("category-select").value);
     renderTodayExpenses();
     displaySummary();
@@ -730,7 +719,6 @@ async function convertCurrency() {
     }
 
     try {
-        // 使用 ExchangeRate-API 獲取匯率數據
         const response = await fetch(`https://api.exchangerate-api.com/v4/latest/${fromCurrency}`);
         const data = await response.json();
         
@@ -749,8 +737,6 @@ async function convertCurrency() {
         document.getElementById("exchangeResult").innerHTML = "匯率轉換失敗，請稍後再試";
     }
 }
-
-// 添加事件監聽，當貨幣選擇改變時自動更新匯率
 document.addEventListener("DOMContentLoaded", () => {
     const fromCurrency = document.getElementById("fromCurrency");
     const toCurrency = document.getElementById("toCurrency");
@@ -775,14 +761,11 @@ async function fetchTopVolumeTW() {
         
         const response = await fetch(`https://www.twse.com.tw/rwd/zh/afterTrading/MI_INDEX20?date=${formattedDate}&response=json`);
         const data = await response.json();
-
-        // 檢查資料完整性
         if (!data || data.stat !== 'OK') {
             throw new Error('無法取得股市資料');
         }
 
         if (!data.data || !Array.isArray(data.data) || data.data.length < 10) {
-            // 如果資料少於10筆，可能是非交易時間或資料不完整
             const errorMessage = isMarketTime() ? 
                 '股市資料不完整，請稍後再試' : 
                 '目前為非交易時間，顯示最後更新資料';
@@ -812,7 +795,6 @@ function isMarketTime() {
     const minute = now.getMinutes();
     const currentTime = hour * 60 + minute;
 
-    // 如果是週末
     if (day === 0 || day === 6) return false;
     return currentTime >= 540 && currentTime <= 810;
 }
@@ -821,7 +803,6 @@ function updateStockMarquee(stockData) {
     const marquee = document.getElementById('stockMarquee');
     
     if (!stockData || stockData.length === 0) {
-        // 根據時間顯示不同的提示訊息
         const message = isMarketTime() ? 
             '無法取得即時股票資訊，請稍後再試' : 
             '非交易時間，股票資訊將於下個交易日更新';
@@ -829,14 +810,9 @@ function updateStockMarquee(stockData) {
         marquee.innerHTML = `<span class="no-data">${message}</span>`;
         return;
     }
-    
     let stockHTML = '<span class="stock-item">今日股票前二十成交量：</span>';
     stockData.forEach(stock => {
         if (!stock) return;
-        
-        // 根據股票漲跌資訊(stock.change)來決定顯示的樣式和符號
-        // 當股票資訊中的 change 值包含 '+' 時表示上漲，使用紅色(stock-up)和上漲符號(▲)
-        // 當包含 '-' 時表示下跌，使用綠色(stock-down)和下跌符號(▼)
         const changeClass = stock.upordown.includes('+') ? 'stock-up' : 'stock-down';
         const changeSymbol = stock.upordown.includes('+') ? '▲' : '▼';
         stockHTML += `
@@ -864,14 +840,10 @@ async function fetchStockInfo() {
         updateStockMarquee([]); 
     }
 }
-
-// 定期更新股市資訊
 function startStockUpdates() {
-    fetchStockInfo(); // 初始獲取
-    setInterval(fetchStockInfo, 300000); // 每5分鐘更新一次
+    fetchStockInfo();
+    setInterval(fetchStockInfo, 300000);
 }
-
-// 確保在 init 函數中調用
 document.addEventListener('DOMContentLoaded', () => {
     startStockUpdates();
 });
@@ -880,13 +852,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const button = document.getElementById('draggableButton');
     const menu = document.getElementById('extraFeatures');
     const resetButton = document.getElementById('resetButton');
-    
-    // 點擊按鈕顯示/隱藏選單
     button.addEventListener('click', () => {
         menu.classList.toggle('show');
     });
-
-    // 點擊返回按鈕
     const backButton = document.getElementById('backButton');
     backButton.addEventListener('click', () => {
         window.open('index.html', '_self');
@@ -899,8 +867,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const toCurrency = document.getElementById('toCurrency');
     const exchangeResult = document.getElementById('exchangeResult');
     const exchangeRate = document.getElementById('exchangeRate');
-
-    // 監聽輸入和選擇事件
     [exchangeAmount, fromCurrency, toCurrency].forEach(element => {
         element.addEventListener('change', () => {
             if (exchangeAmount.value) {
@@ -911,5 +877,19 @@ document.addEventListener('DOMContentLoaded', () => {
                 exchangeRate.classList.remove('show');
             }
         });
+    });
+});
+document.addEventListener('DOMContentLoaded', () => {
+    const resetButton = document.getElementById('resetButton');
+    resetButton.addEventListener('click', () => {
+        document.getElementById("expenseAmount").value = "";
+        document.getElementById("expenseNote").value = "";
+        const today = new Date().toLocaleString('zh-TW', {
+            timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+            year: 'numeric',
+            month: '2-digit',
+            day: '2-digit'
+        }).split('/').join('-');
+        document.getElementById("expenseDate").value = today;
     });
 });
