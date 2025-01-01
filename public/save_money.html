@@ -14,6 +14,14 @@
 </head>
 <body>
     <div class="sidebar">
+        <div class="button-container">
+            <div id="resetButton" class="reset-button">
+                <span>↺</span>
+            </div>
+            <div id="draggableButton" class="floating-button">
+                <span>+</span>
+            </div>
+        </div>
         <div class="sidebar-section">
             <h2>新增支出(收入)預約</h2>
             <input type="date" id="expenseDate" value="">
@@ -38,6 +46,7 @@
                 <button class="category-btn" onclick="addExpenseWithCategory('娛樂')">娛樂</button>
                 <button class="category-btn" onclick="addExpenseWithCategory('交通')">交通</button>
                 <button class="category-btn" onclick="addExpenseWithCategory('投資')">投資</button>
+                <button class="category-btn" onclick="addExpenseWithCategory('其他')">其他</button>
             </div>
             <br>
             <div>收入</div>
@@ -59,15 +68,11 @@
                 <option value="娛樂">娛樂</option>
                 <option value="交通">交通</option>
                 <option value="投資">投資</option>
+                <option value="其他">其他</option>
                 <option value="薪水">薪水</option>
                 <option value="bonus">Bonus</option>
             </select>
-        </div>
-        <div id="draggableButton" class="floating-button">
-            <span>+</span>
-        </div>
-        <div id="resetButton" class="reset-button">
-            <span>↺</span>
+            
         </div>
         <div id="extraFeatures" class="extra-features">
             <div class="feature-section">

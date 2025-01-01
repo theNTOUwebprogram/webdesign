@@ -302,6 +302,7 @@ function renderPieChart() {
         '零食': '#1959e4',
         '娛樂': '#140181',
         '飲料': '#0300c2',
+        '其他': '#000000', 
         '薪水': '#e4bb03',
         'bonus': '#c9b24e'
     };
@@ -406,6 +407,7 @@ function renderTodayExpenses() {
                         '零食': '#1959e4',
                         '飲料': '#0300c2',
                         '娛樂': '#140181',
+                        '其他': '#000000',
                         '交通': '#9a00c0',
                         '投資': '#7002a3',
                         '薪水': '#e4bb03',
@@ -420,6 +422,7 @@ function renderTodayExpenses() {
                         '零食': '#4778e0',
                         '飲料': '#3432bd',
                         '娛樂': '#332199',
+                        '其他': '#4a4545',
                         '交通': '#a84cbe',
                         '投資': '#7e35a0',
                         '薪水': '#e9d26a',
@@ -427,7 +430,7 @@ function renderTodayExpenses() {
                     };
                     
                     // 決定文字顏色
-                    const needsWhiteText = ['交通', '早餐', '中餐', '晚餐', '投資', '零食', '娛樂', '飲料'];
+                    const needsWhiteText = ['交通', '早餐', '中餐', '晚餐', '投資', '零食', '娛樂', '飲料', '其他'];
                     const textColor = needsWhiteText.includes(expense.category) ? 'white' : 'black';
                     
                     return `
@@ -861,106 +864,41 @@ document.addEventListener('DOMContentLoaded', () => {
     const menu = document.getElementById('extraFeatures');
     const resetButton = document.getElementById('resetButton');
     
-    // 全域變量
-    let isDragging = false;
-    let currentX;
-    let currentY;
-    let initialX;
-    let initialY;
-    let xOffset = 0;
-    let yOffset = 0;
-
-    // 拖動功能
-    button.addEventListener('mousedown', dragStart);
-    document.addEventListener('mousemove', drag);
-    document.addEventListener('mouseup', dragEnd);
-
+    // 點擊顯示/隱藏選單
+    button.addEventListener('click', (e) => {
+        menu.classList.toggle('show');
+        if (menu.classList.contains('show')) {
+            const rect = button.getBoundingClientRect();
+            const windowWidth = window.innerWidth;
+            
+            // 檢查按鈕是否在視窗的右半部
+            if (rect.left > windowWidth / 2) {
+                // 在右半部，選單顯示在左側
+                menu.style.top = `${rect.top}px`;
+                menu.style.left = `${rect.left - menu.offsetWidth - 10}px`;
+            } else {
+                // 在左半部，選單顯示在右側
+                menu.style.top = `${rect.top}px`;
+                menu.style.left = `${rect.right + 10}px`;
+            }
+        }
+    });
+    
+    // 點擊其他地方關閉選單
+    document.addEventListener('click', (e) => {
+        if (!menu.contains(e.target) && !button.contains(e.target)) {
+            menu.classList.remove('show');
+        }
+    });
+    
     // 重置按鈕功能
     resetButton.addEventListener('click', () => {
-        // 重置浮動按鈕位置
-        button.style.transform = '';
-        button.style.left = '170px';
-        button.style.top = '20px';
-        xOffset = 0;
-        yOffset = 0;
-        currentX = 0;
-        currentY = 0;
-        initialX = 0;
-        initialY = 0;
-        
         // 清除輸入欄位
         document.getElementById('expenseAmount').value = '';
         document.getElementById('expenseNote').value = '';
         
         // 如果選單是開啟的，也要關閉它
         if (menu.classList.contains('show')) {
-            menu.classList.remove('show');
-        }
-    });
-
-    // 點擊顯示/隱藏選單
-    button.addEventListener('click', (e) => {
-        if (!isDragging) {
-            menu.classList.toggle('show');
-            if (menu.classList.contains('show')) {
-                const rect = button.getBoundingClientRect();
-                const windowWidth = window.innerWidth;
-                
-                // 檢查按鈕是否在視窗的右半部
-                if (rect.left > windowWidth / 2) {
-                    // 在右半部，選單顯示在左側
-                    menu.style.top = `${rect.top}px`;
-                    menu.style.left = `${rect.left - menu.offsetWidth - 10}px`;
-                } else {
-                    // 在左半部，選單顯示在右側
-                    menu.style.top = `${rect.top}px`;
-                    menu.style.left = `${rect.right + 10}px`;
-                }
-            }
-        }
-    });
-
-    function dragStart(e) {
-        initialX = e.clientX - xOffset;
-        initialY = e.clientY - yOffset;
-        if (e.target === button) {
-            isDragging = true;
-            button.classList.add('dragging');
-        }
-    }
-
-    function drag(e) {
-        if (isDragging) {
-            e.preventDefault();
-            currentX = e.clientX - initialX;
-            currentY = e.clientY - initialY;
-            
-            const windowWidth = window.innerWidth;
-            const windowHeight = window.innerHeight;
-            const buttonRect = button.getBoundingClientRect();
-            const buttonWidth = buttonRect.width;
-            const buttonHeight = buttonRect.height;
-            
-            currentX = Math.max(0, Math.min(currentX, windowWidth - buttonWidth));
-            currentY = Math.max(0, Math.min(currentY, windowHeight - buttonHeight));
-            
-            xOffset = currentX;
-            yOffset = currentY;
-            
-            button.style.transform = `translate(${currentX}px, ${currentY}px)`;
-        }
-    }
-
-    function dragEnd() {
-        initialX = currentX;
-        initialY = currentY;
-        isDragging = false;
-        button.classList.remove('dragging');
-    }
-
-    // 點擊其他地方關閉選單
-    document.addEventListener('click', (e) => {
-        if (!menu.contains(e.target) && !button.contains(e.target)) {
             menu.classList.remove('show');
         }
     });
