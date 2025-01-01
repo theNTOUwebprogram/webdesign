@@ -8,7 +8,7 @@ function start() {
     const accountInput = $("#accountInput");
     const passwordInput = $("#passwordInput");
     const have_account = $("#have_account");
-    const new_account = $("#new_account");
+    const create_account = $("#create_account");
     const delete_account = $("#delete_account");
     const coin = $("#coin");
     const user_name = $("#user_name");
@@ -30,7 +30,9 @@ function start() {
 
     // 綁定按鈕事件
     have_account.on("click", () => login(accountInput, passwordInput));
-    new_account.on("click", () => generateAccount(accountInput, passwordInput));
+    create_account.on("click", () => {
+        window.open('create.html', '_self');
+    });
     delete_account.on("click", () => deleteAccount(accountInput, passwordInput));
 }
 

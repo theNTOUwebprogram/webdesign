@@ -864,42 +864,35 @@ document.addEventListener('DOMContentLoaded', () => {
     const menu = document.getElementById('extraFeatures');
     const resetButton = document.getElementById('resetButton');
     
-    // 點擊顯示/隱藏選單
-    button.addEventListener('click', (e) => {
+    // 點擊按鈕顯示/隱藏選單
+    button.addEventListener('click', () => {
         menu.classList.toggle('show');
-        if (menu.classList.contains('show')) {
-            const rect = button.getBoundingClientRect();
-            const windowWidth = window.innerWidth;
-            
-            // 檢查按鈕是否在視窗的右半部
-            if (rect.left > windowWidth / 2) {
-                // 在右半部，選單顯示在左側
-                menu.style.top = `${rect.top}px`;
-                menu.style.left = `${rect.left - menu.offsetWidth - 10}px`;
+    });
+
+    // 點擊返回按鈕
+    const backButton = document.getElementById('backButton');
+    backButton.addEventListener('click', () => {
+        window.open('index.html', '_self');
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    const exchangeAmount = document.getElementById('exchangeAmount');
+    const fromCurrency = document.getElementById('fromCurrency');
+    const toCurrency = document.getElementById('toCurrency');
+    const exchangeResult = document.getElementById('exchangeResult');
+    const exchangeRate = document.getElementById('exchangeRate');
+
+    // 監聽輸入和選擇事件
+    [exchangeAmount, fromCurrency, toCurrency].forEach(element => {
+        element.addEventListener('change', () => {
+            if (exchangeAmount.value) {
+                exchangeResult.classList.add('show');
+                exchangeRate.classList.add('show');
             } else {
-                // 在左半部，選單顯示在右側
-                menu.style.top = `${rect.top}px`;
-                menu.style.left = `${rect.right + 10}px`;
+                exchangeResult.classList.remove('show');
+                exchangeRate.classList.remove('show');
             }
-        }
-    });
-    
-    // 點擊其他地方關閉選單
-    document.addEventListener('click', (e) => {
-        if (!menu.contains(e.target) && !button.contains(e.target)) {
-            menu.classList.remove('show');
-        }
-    });
-    
-    // 重置按鈕功能
-    resetButton.addEventListener('click', () => {
-        // 清除輸入欄位
-        document.getElementById('expenseAmount').value = '';
-        document.getElementById('expenseNote').value = '';
-        
-        // 如果選單是開啟的，也要關閉它
-        if (menu.classList.contains('show')) {
-            menu.classList.remove('show');
-        }
+        });
     });
 });

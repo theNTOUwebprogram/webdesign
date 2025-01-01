@@ -176,30 +176,24 @@ h1 {
 
 .button-group {
     position: absolute;
-
     display: flex;
     flex-direction: column;
     flex-wrap: wrap;
-
     top: 440px;
     left: 50px;
-
+    gap: 10px;
     z-index: 1;
 }
 
 .button {
     height: 55px;
     width: 200px;
-    margin-top: 20px;
     border: none;
     border-radius: 10px;
-    
     font-size: 30px;
     font-weight: bold;
-
     color: #223553;
     background-color: #d8dbcf;
-
     transition: background-color 0.5s ease;
 }
 

@@ -1,136 +1,119 @@
 body, html {
     font-family: Arial, sans-serif;
-
     height: 100%;
     margin: 0;
-    font-weight: bolder;
-    background-color: #e6da59;
+    background-color: #333;
+    color: white;
 }
+
+.sidebar {
+    position: fixed;
+    left: 0;
+    top: 0;
+    width: 250px;
+    height: 100%;
+    background-color: #444;
+    padding: 20px;
+    box-shadow: 2px 0 5px rgba(0, 0, 0, 0.2);
+}
+
+.main-content {
+    margin-left: 270px;
+    padding: 20px;
+}
+
+h1 {
+    color: #e4bb03;
+    text-align: center;
+    margin-bottom: 40px;
+    font-size: 2.5em;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+}
+
 #container {
-    position: relative;
-    top:200px;
-    margin: auto;
-    border: 1px solid rgb(243, 239, 239);
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 30px;
+    background-color: #444;
     border-radius: 8px;
-    width: 500px;
-    height: 320px;
-    background-color: rgb(201, 200, 196);
-    color: rgb(215, 183, 0);
-    font-size: 25px;
-    font-style: italic;
-    text-shadow: 2px 1px 2px rgba(91, 70, 2, 0.5);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+
+.input-group {
+    margin-bottom: 30px;
+}
+
+.annotation {
+    color: #e4bb03;
+    font-size: 1.2em;
+    margin-bottom: 8px;
+}
+
+.Input {
+    width: 100%;
+    padding: 12px;
+    margin-bottom: 20px;
+    border: none;
+    border-radius: 4px;
+    background-color: #555;
+    color: white;
+    font-size: 1.1em;
+    box-sizing: border-box;
+}
+
+.Input:focus {
+    outline: 2px solid #e4bb03;
+    background-color: #666;
+}
+
+#new_account {
+    width: 100%;
+    padding: 15px;
+    border: none;
+    border-radius: 4px;
+    background-color: #e4bb03;
+    color: #333;
+    font-size: 1.2em;
+    font-weight: bold;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+#new_account:hover {
+    background-color: #f4cb13;
+}
+
+.back-button {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background: none;
+    border: none;
+    color: #e4bb03;
+    cursor: pointer;
+    font-size: 1.1em;
+    transition: color 0.3s ease;
+}
+
+.back-button:hover {
+    color: #f4cb13;
 }
 
 .arrow-left {
     display: flex;
     align-items: center;
-    height: 30px;
-    width: 20px;
+    margin-right: 10px;
 }
-.line {
-    width: 10px;
-    height: 8px;
-    background-color: rgb(215, 183, 0);
-    margin-left: 0px;
-}
+
 .triangle {
-    width: 0px;
-    height: 5px;
-    border-top: 5px solid transparent;
-    border-bottom: 5px solid transparent;
-    border-right: 10px solid rgb(215, 183, 0);
+    border-right: 10px solid #e4bb03;
+    border-top: 8px solid transparent;
+    border-bottom: 8px solid transparent;
 }
 
-#back {
-    position: relative;
-    left: 10px;
-    background-color: rgb(201, 200, 196);
-    cursor: pointer;
-    width: 90px;
-    border: rgb(201, 200, 196);
-}
-
-#back_login {
-    position:absolute;
-    top:2px;
-    left: 30px;
-    font-size: 20px;
-    width: 40px;
-    color: rgb(215, 183, 0);
-    font-weight: bolder;
-    font-style: italic;
-    text-shadow: 1px 1px 1px rgba(117, 100, 2, 0.5);
-}
-
-#account_annotation {
-    position:relative;
-    top: 95px;
-    left: 10px;
-}
-
-#password_annotation {
-    position:relative;
-    top: 40px;
-    left: 10px;
-}
-
-#accountInput {
-    position: relative;
-    top:65px
-}
-
-#passwordInput {
-    position: relative;
-    top:8px
-}
-
-.Input {
-    left:10px;
-    width: 210px;
-    font-size: 20px;
-    border-radius: 10px;
-    border: white 3px solid;
-    background-color: rgb(201, 200, 196);
-    color: rgb(158, 154, 154);
-    font-style: italic;
-    text-shadow: 1px 1px 1px rgba(54, 53, 53, 0.5);
-}
-
-#new_account {
-    position: absolute;
-    right: 70px;
-    bottom: 20px;
-    width: 100px;
-    height: 100px;
-    background-color: rgb(244, 52, 52);
-    border: white 1px solid;
-    border-radius: 100px;
-    cursor: pointer;
-    font-size: 30px;
-    padding-top: 0px;
-    padding-bottom: 0px;
-    font-weight: bolder;
-    color: rgb(28, 1, 125);
-}
-
-#new_account:hover {
-    background-color: rgb(244, 78, 78);
-    border: white 1px solid;
-}
-
-#ic {
-    position: absolute;
-    top: 70px;
-    left: 40px;
-    border-radius: 10px;
-    width: 50px;
-    height: 40px;
-    background-color: rgb(255, 217, 0);
-    border: rgb(86, 86, 86) 1px solid;
-}
-h2 {
-    position: absolute;
-    left: 120px;
-    color: rgb(158, 154, 154);
-    text-shadow: 3px 1px 2px rgba(54, 53, 53, 0.5);
+.line {
+    width: 15px;
+    height: 3px;
+    background-color: #e4bb03;
+    margin-left: -2px;
 }

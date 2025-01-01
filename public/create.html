@@ -11,27 +11,31 @@
     <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-    <div id="container">
-        <button id = "back">
+    <div class="sidebar">
+        <button id="back" class="back-button">
             <div class="arrow-left">
                 <div class="triangle"></div>
                 <div class="line"></div>
             </div>
             <span id="back_login">返回</span>
         </button>
-        
-        <span id="ic"></span>
-        <h2>1234 5678 9101</h2>
-        <label>
-            <p id="account_annotation">帳號</p>
-            <input class="Input" type="text" id="accountInput" placeholder="請輸入帳號">
-        </label>
-        <label>
-            <p id="password_annotation">密碼</p>
-            <input class="Input"  type="password" id="passwordInput" placeholder="請輸入密碼(字母+數字)">
-        </label>
-        <button id = "new_account">創建帳號</button>
-        
+    </div>
+    
+    <div class="main-content">
+        <h1>創建新帳號</h1>
+        <div id="container">
+            <div class="input-group">
+                <label>
+                    <p class="annotation">帳號</p>
+                    <input class="Input" type="text" id="accountInput" placeholder="請輸入帳號">
+                </label>
+                <label>
+                    <p class="annotation">密碼</p>
+                    <input class="Input" type="password" id="passwordInput" placeholder="請輸入密碼(字母+數字)">
+                </label>
+            </div>
+            <button id="new_account">創建帳號</button>
+        </div>
     </div>
 </body>
 </html>
